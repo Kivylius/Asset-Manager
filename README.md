@@ -20,7 +20,7 @@
 
 </div>
 
-Manange all your Godot assets in a single place, get previews and send files directly into project(s). Supports godot 4.x on Mac/Linux & Windows.
+Manage all your Godot assets in a single place, get previews and send files directly into project(s). Supports godot 4.x on Mac/Linux & Windows.
 
 ## Key Features
 
