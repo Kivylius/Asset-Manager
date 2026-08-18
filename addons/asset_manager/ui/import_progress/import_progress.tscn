@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://25jkc4bka2kx"]
+
+[ext_resource type="Script" uid="uid://bparahwdi4jl3" path="res://addons/asset_manager/ui/import_progress/import_progress.gd" id="1_elbxu"]
+
+[node name="ImportProgress" type="AcceptDialog" unique_id=1190868829]
+title = "Rebuilding Index"
+size = Vector2i(900, 190)
+unresizable = true
+script = ExtResource("1_elbxu")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=530431147]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="Margin" unique_id=1461165458]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StageRow" type="HBoxContainer" parent="Margin/VBox" unique_id=511552101]
+layout_mode = 2
+
+[node name="StageLabel" type="Label" parent="Margin/VBox/StageRow" unique_id=796077744]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Starting..."
+
+[node name="ElapsedLabel" type="Label" parent="Margin/VBox/StageRow" unique_id=1342762303]
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+text = "0:00"
+horizontal_alignment = 2
+
+[node name="StageBar" type="ProgressBar" parent="Margin/VBox" unique_id=2007136322]
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+show_percentage = false
+
+[node name="Spacer" type="Control" parent="Margin/VBox" unique_id=668700059]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+
+[node name="DetailRow" type="HBoxContainer" parent="Margin/VBox" unique_id=581562298]
+layout_mode = 2
+
+[node name="DetailLabel" type="Label" parent="Margin/VBox/DetailRow" unique_id=1376539104]
+layout_mode = 2
+size_flags_horizontal = 3
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="CountLabel" type="Label" parent="Margin/VBox/DetailRow" unique_id=95013552]
+layout_mode = 2
+
+[node name="DetailBar" type="ProgressBar" parent="Margin/VBox" unique_id=1632339207]
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+show_percentage = false

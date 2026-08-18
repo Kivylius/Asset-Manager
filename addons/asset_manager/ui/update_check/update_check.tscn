@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://82pan0dqp60"]
+
+[ext_resource type="Script" uid="uid://cpmnrh500xa7i" path="res://addons/asset_manager/ui/update_check/update_check.gd" id="1_jb8rr"]
+
+[node name="UpdateCheck" type="Button" unique_id=187971636]
+visible = false
+tooltip_text = "A newer version is available"
+flat = true
+script = ExtResource("1_jb8rr")
+
+[node name="Request" type="HTTPRequest" parent="." unique_id=895713967]

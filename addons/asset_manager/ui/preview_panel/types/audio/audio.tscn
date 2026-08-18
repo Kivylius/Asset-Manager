@@ -1,0 +1,215 @@
+[gd_scene format=3 uid="uid://depyb5hetl6ij"]
+
+[ext_resource type="Script" uid="uid://nlv3ue1ndpjv" path="res://addons/asset_manager/ui/preview_panel/types/audio/audio.gd" id="1_x8yxr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3kxwg"]
+bg_color = Color(0.12, 0.12, 0.12, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+
+[sub_resource type="Gradient" id="Gradient_bt622"]
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.75)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7kts3"]
+gradient = SubResource("Gradient_bt622")
+width = 128
+height = 128
+fill_to = Vector2(0, 1)
+
+[node name="Audio" type="Control" unique_id=1276657256]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_x8yxr")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1425211154]
+volume_db = -12.0412
+
+[node name="VBox" type="VBoxContainer" parent="." unique_id=1966274468]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.2
+anchor_right = 0.9
+anchor_bottom = 0.8
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="WaveformPanel" type="PanelContainer" parent="VBox" unique_id=1040267366]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_3kxwg")
+
+[node name="LayerHost" type="Control" parent="VBox/WaveformPanel" unique_id=752492880]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CoverArtRect" type="TextureRect" parent="VBox/WaveformPanel/LayerHost" unique_id=271474829]
+modulate = Color(1, 1, 1, 0.25)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CoverArtFallbackLabel" type="Label" parent="VBox/WaveformPanel/LayerHost" unique_id=1594690151]
+modulate = Color(1, 1, 1, 0.35)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.2
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "No cover art"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WaveformStrip" type="Control" parent="VBox/WaveformPanel/LayerHost" unique_id=764522548]
+layout_mode = 1
+anchor_top = 0.7
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="WaveformPadding" type="Control" parent="VBox/WaveformPanel/LayerHost/WaveformStrip" unique_id=2082598201]
+layout_mode = 1
+anchor_left = 0.05
+anchor_top = 0.1
+anchor_right = 0.95
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="WaveformImageRect" type="TextureRect" parent="VBox/WaveformPanel/LayerHost/WaveformStrip/WaveformPadding" unique_id=558182562]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+
+[node name="PlayedClip" type="Control" parent="VBox/WaveformPanel/LayerHost/WaveformStrip/WaveformPadding" unique_id=1776161871]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="WaveformPlayedRect" type="TextureRect" parent="VBox/WaveformPanel/LayerHost/WaveformStrip/WaveformPadding/PlayedClip" unique_id=802700782]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+
+[node name="Playhead" type="ColorRect" parent="VBox/WaveformPanel/LayerHost/WaveformStrip/WaveformPadding" unique_id=256748157]
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_right = 2.0
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.35, 0.65, 1, 0.95)
+
+[node name="WaveformStripLabel" type="Label" parent="VBox/WaveformPanel/LayerHost/WaveformStrip/WaveformPadding" unique_id=1622875300]
+modulate = Color(1, 1, 1, 0.4)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Waveform (coming soon)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FadeGradient" type="TextureRect" parent="VBox/WaveformPanel/LayerHost/WaveformStrip" unique_id=389361178]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_7kts3")
+expand_mode = 1
+
+[node name="TransportCard" type="PanelContainer" parent="VBox" unique_id=801220075]
+layout_mode = 2
+
+[node name="TransportBox" type="VBoxContainer" parent="VBox/TransportCard" unique_id=1267294320]
+layout_mode = 2
+
+[node name="ScrubRow" type="HBoxContainer" parent="VBox/TransportCard/TransportBox" unique_id=1509484160]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CurrentTimeLabel" type="Label" parent="VBox/TransportCard/TransportBox/ScrubRow" unique_id=1347408149]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+text = "0:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScrubSlider" type="HSlider" parent="VBox/TransportCard/TransportBox/ScrubRow" unique_id=1860288293]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.001
+
+[node name="TotalTimeLabel" type="Label" parent="VBox/TransportCard/TransportBox/ScrubRow" unique_id=449890151]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+text = "0:00"
+vertical_alignment = 1
+
+[node name="ControlsRow" type="HBoxContainer" parent="VBox/TransportCard/TransportBox" unique_id=8263341]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StopButton" type="Button" parent="VBox/TransportCard/TransportBox/ControlsRow" unique_id=1369377395]
+custom_minimum_size = Vector2(40, 36)
+layout_mode = 2
+tooltip_text = "Stop"
+
+[node name="PlayPauseButton" type="Button" parent="VBox/TransportCard/TransportBox/ControlsRow" unique_id=749448687]
+custom_minimum_size = Vector2(48, 36)
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="VBox/TransportCard/TransportBox/ControlsRow" unique_id=1717509691]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VolumeLabel" type="Label" parent="VBox/TransportCard/TransportBox/ControlsRow" unique_id=1611566368]
+layout_mode = 2
+text = "Vol"
+vertical_alignment = 1
+
+[node name="VolumeSlider" type="HSlider" parent="VBox/TransportCard/TransportBox/ControlsRow" unique_id=35726916]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+size_flags_vertical = 4
+value = 25.0

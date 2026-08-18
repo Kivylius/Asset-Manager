@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://djnfkmqj62s6r"]
+
+[ext_resource type="Script" uid="uid://cyavwtu4u58q8" path="res://addons/asset_manager/ui/preview_panel/types/effects/effects.gd" id="1_jn4eg"]
+
+[node name="Effects" type="Control" unique_id=1704945023]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_jn4eg")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=700780125]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=936595888]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport" unique_id=1121572734]
+transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 2, 2, 3)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport" unique_id=1107703912]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 5, 0)
+light_energy = 0.5
+
+[node name="EffectPivot" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=1292021266]
+
+[node name="SubViewportContainer2D" type="SubViewportContainer" parent="." unique_id=1892462212]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport2D" type="SubViewport" parent="SubViewportContainer2D" unique_id=214737764]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="Camera2D" type="Camera2D" parent="SubViewportContainer2D/SubViewport2D" unique_id=1814270420]
+zoom = Vector2(0.8, 0.8)
+
+[node name="EffectPivot2D" type="Node2D" parent="SubViewportContainer2D/SubViewport2D" unique_id=1741373514]
+
+[node name="ViewportToolbar" type="MarginContainer" parent="." unique_id=377897491]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+
+[node name="HBox" type="HBoxContainer" parent="ViewportToolbar" unique_id=544337548]
+layout_mode = 2
+alignment = 2
+
+[node name="RestartBtn" type="Button" parent="ViewportToolbar/HBox" unique_id=1388565634]
+layout_mode = 2
+tooltip_text = "Restart effect"
+text = "Play"
+
+[node name="ResetOriginBtn" type="Button" parent="ViewportToolbar/HBox" unique_id=876199094]
+layout_mode = 2
+tooltip_text = "Reset view"
+
+[node name="GridToggleBtn" type="Button" parent="ViewportToolbar/HBox" unique_id=1136259821]
+layout_mode = 2
+tooltip_text = "Toggle reference grid"
+toggle_mode = true
+button_pressed = true

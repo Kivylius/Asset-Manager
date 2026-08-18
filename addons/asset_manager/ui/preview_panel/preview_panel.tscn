@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://c53eum4ytt0xr"]
+
+[ext_resource type="Script" uid="uid://dn7dygb1wrsd7" path="res://addons/asset_manager/ui/preview_panel/preview_panel.gd" id="1_llcbk"]
+[ext_resource type="PackedScene" uid="uid://dbvjytlbhql11" path="res://addons/asset_manager/ui/preview_panel/tag_editor/tag_editor.tscn" id="2_di134"]
+
+[node name="PreviewPanel" type="PanelContainer" unique_id=2024243580]
+script = ExtResource("1_llcbk")
+
+[node name="VBox" type="VBoxContainer" parent="." unique_id=438648369]
+layout_mode = 2
+
+[node name="Stage" type="PanelContainer" parent="VBox" unique_id=1285982073]
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PreviewSlot" type="Control" parent="VBox/Stage" unique_id=959550689]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Card" type="PanelContainer" parent="VBox" unique_id=675158248]
+layout_mode = 2
+
+[node name="CardBox" type="VBoxContainer" parent="VBox/Card" unique_id=331548105]
+layout_mode = 2
+
+[node name="Meta" type="VBoxContainer" parent="VBox/Card/CardBox" unique_id=1578209613]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="FileNameLabel" type="Label" parent="VBox/Card/CardBox/Meta" unique_id=191270648]
+layout_mode = 2
+text = "No asset selected"
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="DetailLabel" type="Label" parent="VBox/Card/CardBox/Meta" unique_id=511985676]
+layout_mode = 2
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="TagEditor" parent="VBox/Card/CardBox" unique_id=2120461331 instance=ExtResource("2_di134")]
+layout_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="VBox" unique_id=1522206889]
+layout_mode = 2
+
+[node name="SendToProjectButton" type="Button" parent="VBox/Actions" unique_id=1155380604]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "Send to Project"
+
+[node name="OpenExternalButton" type="Button" parent="VBox/Actions" unique_id=1704527991]
+layout_mode = 2
+tooltip_text = "Open in default application"
+disabled = true
+
+[node name="OpenLocationButton" type="Button" parent="VBox/Actions" unique_id=226282170]
+layout_mode = 2
+tooltip_text = "Show in file manager"
+disabled = true

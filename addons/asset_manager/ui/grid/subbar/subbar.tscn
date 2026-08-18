@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://buw57j5xf0aqs"]
+
+[ext_resource type="Script" uid="uid://61j7kpp3mh2m" path="res://addons/asset_manager/ui/grid/subbar/subbar.gd" id="1_cxkb3"]
+
+[node name="Subbar" type="HBoxContainer" unique_id=505685690]
+script = ExtResource("1_cxkb3")
+
+[node name="SortOption" type="OptionButton" parent="." unique_id=179653223]
+layout_mode = 2
+tooltip_text = "Sort order"
+flat = true
+
+[node name="FilterSlot" type="OptionButton" parent="." unique_id=113294352]
+layout_mode = 2
+flat = true
+
+[node name="SpacerLeft" type="Control" parent="." unique_id=1863172568]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Pager" type="HBoxContainer" parent="." unique_id=758428662]
+layout_mode = 2
+
+[node name="PrevButton" type="Button" parent="Pager" unique_id=359126925]
+layout_mode = 2
+tooltip_text = "Previous page"
+text = "‹"
+flat = true
+
+[node name="PageLabel" type="Label" parent="Pager" unique_id=133682667]
+layout_mode = 2
+text = "1 / 1"
+vertical_alignment = 1
+
+[node name="NextButton" type="Button" parent="Pager" unique_id=1763401736]
+layout_mode = 2
+tooltip_text = "Next page"
+text = "›"
+flat = true
+
+[node name="PerPageOption" type="OptionButton" parent="Pager" unique_id=931750428]
+layout_mode = 2
+tooltip_text = "Assets per page"
+flat = true
+selected = 1
+item_count = 4
+popup/item_0/text = "50"
+popup/item_0/id = 50
+popup/item_1/text = "100"
+popup/item_1/id = 100
+popup/item_2/text = "250"
+popup/item_2/id = 250
+popup/item_3/text = "500"
+popup/item_3/id = 500
+
+[node name="SpacerRight" type="Control" parent="." unique_id=1093304509]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SizeBox" type="HBoxContainer" parent="." unique_id=951444501]
+layout_mode = 2
+
+[node name="SizeSlider" type="HSlider" parent="SizeBox" unique_id=17600690]
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Tile size. Shift+scroll over the grid does the same."
+
+[node name="ViewButton" type="Button" parent="." unique_id=1521786437]
+layout_mode = 2
+tooltip_text = "Grid / list view"
+text = "▦"
+flat = true

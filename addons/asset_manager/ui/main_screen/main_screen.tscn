@@ -1,0 +1,102 @@
+[gd_scene format=3 uid="uid://dspvtw055wu4s"]
+
+[ext_resource type="Script" uid="uid://c04haxnixcrv0" path="res://addons/asset_manager/ui/main_screen/main_screen.gd" id="1_wb7mr"]
+[ext_resource type="PackedScene" uid="uid://c3v6qb674lnah" path="res://addons/asset_manager/ui/project_settings/project_settings.tscn" id="2_mxsfc"]
+[ext_resource type="PackedScene" uid="uid://bv21eewv8oeiy" path="res://addons/asset_manager/ui/toolbar/toolbar.tscn" id="3_vf2d4"]
+[ext_resource type="PackedScene" uid="uid://befx1hxq27fy7" path="res://addons/asset_manager/ui/sidebar/sidebar.tscn" id="4_hv5vg"]
+[ext_resource type="PackedScene" uid="uid://bbd2q7dp28pfk" path="res://addons/asset_manager/ui/grid/grid.tscn" id="5_ogqh4"]
+[ext_resource type="PackedScene" uid="uid://c53eum4ytt0xr" path="res://addons/asset_manager/ui/preview_panel/preview_panel.tscn" id="6_wvjpn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0fbkt"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.10787, 0.10787, 0.10787, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 7
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ajbqt"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.12236, 0.12236, 0.12236, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 7
+
+[node name="AssetManager" type="Control" unique_id=1542862080]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_wb7mr")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=386739248]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="RootVBox" type="VBoxContainer" parent="MarginContainer" unique_id=693857149]
+layout_mode = 2
+
+[node name="Toolbar" parent="MarginContainer/RootVBox" unique_id=1573731861 instance=ExtResource("3_vf2d4")]
+layout_mode = 2
+theme_override_constants/margin_bottom = 8
+
+[node name="MainSplit" type="HSplitContainer" parent="MarginContainer/RootVBox" unique_id=1402146168]
+layout_mode = 2
+size_flags_vertical = 3
+split_offsets = PackedInt32Array(250)
+split_offset = 250
+
+[node name="Sidebar" parent="MarginContainer/RootVBox/MainSplit" unique_id=336908300 instance=ExtResource("4_hv5vg")]
+custom_minimum_size = Vector2(340, 0)
+layout_mode = 2
+
+[node name="ContentSplit" type="HSplitContainer" parent="MarginContainer/RootVBox/MainSplit" unique_id=369771524]
+layout_mode = 2
+size_flags_horizontal = 3
+split_offsets = PackedInt32Array(400)
+split_offset = 400
+
+[node name="CenterPanel" parent="MarginContainer/RootVBox/MainSplit/ContentSplit" unique_id=1752283180 instance=ExtResource("5_ogqh4")]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_0fbkt")
+
+[node name="PreviewPanel" parent="MarginContainer/RootVBox/MainSplit/ContentSplit" unique_id=527330579 instance=ExtResource("6_wvjpn")]
+custom_minimum_size = Vector2(340, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ajbqt")
+
+[node name="FolderDialog" type="FileDialog" parent="." unique_id=193031342]
+title = "Open a Directory"
+size = Vector2i(800, 600)
+ok_button_text = "Select Current Folder"
+file_mode = 2
+access = 2
+
+[node name="ProjectSettingsDialog" parent="." unique_id=1566484091 instance=ExtResource("2_mxsfc")]
+
+[node name="TagContextMenu" type="PopupMenu" parent="." unique_id=1685252106]
+item_count = 1
+item_0/text = "Delete Tag Globally"
+item_0/id = 0

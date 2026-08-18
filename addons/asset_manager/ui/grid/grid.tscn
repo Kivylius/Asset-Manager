@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://bbd2q7dp28pfk"]
+
+[ext_resource type="Script" uid="uid://b768ovfxnx2fh" path="res://addons/asset_manager/ui/grid/grid.gd" id="1_0rkmc"]
+[ext_resource type="PackedScene" uid="uid://buw57j5xf0aqs" path="res://addons/asset_manager/ui/grid/subbar/subbar.tscn" id="2_0afti"]
+
+[node name="Grid" type="PanelContainer" unique_id=6296592]
+script = ExtResource("1_0rkmc")
+
+[node name="VBox" type="VBoxContainer" parent="." unique_id=416431433]
+layout_mode = 2
+
+[node name="Subbar" parent="VBox" unique_id=1441313503 instance=ExtResource("2_0afti")]
+layout_mode = 2
+
+[node name="GridStack" type="Control" parent="VBox" unique_id=1963911522]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="AssetGrid" type="ItemList" parent="VBox/GridStack" unique_id=1542694290]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+max_columns = 0
+same_column_width = true
+icon_mode = 0
+
+[node name="EmptyState" type="CenterContainer" parent="VBox/GridStack" unique_id=1176149613]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="EmptyBox" type="VBoxContainer" parent="VBox/GridStack/EmptyState" unique_id=2027361863]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="VBox/GridStack/EmptyState/EmptyBox" unique_id=796455166]
+layout_mode = 2
+text = "This workspace is empty"
+horizontal_alignment = 1
+
+[node name="BodyLabel" type="Label" parent="VBox/GridStack/EmptyState/EmptyBox" unique_id=1881197215]
+modulate = Color(1, 1, 1, 0.6)
+layout_mode = 2
+text = "Assets live in folders on disk."
+horizontal_alignment = 1
+
+[node name="OpenFolderButton" type="Button" parent="VBox/GridStack/EmptyState/EmptyBox" unique_id=901214228]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Open Folder"

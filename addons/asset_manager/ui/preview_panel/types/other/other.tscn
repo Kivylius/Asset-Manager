@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://crphic8hqnxjv"]
+
+[ext_resource type="Script" uid="uid://bshgv4so2ybrr" path="res://addons/asset_manager/ui/preview_panel/types/other/other.gd" id="1_ph1p0"]
+
+[node name="Other" type="Control" unique_id=709909764]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_ph1p0")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=16229869]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer" unique_id=1243637625]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="CenterContainer/VBox" unique_id=1892824253]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="CenterContainer/VBox" unique_id=1029375602]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "No preview available"
+horizontal_alignment = 1

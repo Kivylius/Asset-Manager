@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://cpjferw1eucd2"]
+
+[ext_resource type="Script" uid="uid://erqif8neu8em" path="res://addons/asset_manager/ui/preview_panel/types/materials/materials.gd" id="1_np8ux"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_4lfe7"]
+radius = 1.0
+height = 2.0
+
+[node name="Materials" type="Control" unique_id=2073700930]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_np8ux")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=55269890]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1578590021]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+size_2d_override = Vector2i(223, 120)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport" unique_id=564523447]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport" unique_id=328891034]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 5, 0)
+
+[node name="MaterialPivot" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=2004332293]
+
+[node name="PreviewMesh" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/MaterialPivot" unique_id=2037320613]
+mesh = SubResource("SphereMesh_4lfe7")
+
+[node name="ViewportToolbar" type="MarginContainer" parent="." unique_id=1142713971]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+
+[node name="HBox" type="HBoxContainer" parent="ViewportToolbar" unique_id=2032409577]
+layout_mode = 2
+alignment = 2
+
+[node name="ShapeToggleBtn" type="OptionButton" parent="ViewportToolbar/HBox" unique_id=224529165]
+layout_mode = 2

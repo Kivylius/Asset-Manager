@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://ddhr4mft7w0ty"]
+
+[ext_resource type="Script" uid="uid://dtj00s8wceho5" path="res://addons/asset_manager/ui/preview_panel/types/models/models.gd" id="1_kt7vy"]
+
+[node name="Models" type="Control" unique_id=1881748208]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_kt7vy")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=595043741]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=452624536]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+size_2d_override = Vector2i(223, 120)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport" unique_id=2123471356]
+transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 2, 2, 3)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport" unique_id=1539685011]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 5, 0)
+light_energy = 0.5
+
+[node name="ModelPivot" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=1178598910]
+
+[node name="ViewportToolbar" type="MarginContainer" parent="." unique_id=1432142251]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+
+[node name="HBox" type="HBoxContainer" parent="ViewportToolbar" unique_id=1046043381]
+layout_mode = 2
+alignment = 2
+
+[node name="ResetOriginBtn" type="Button" parent="ViewportToolbar/HBox" unique_id=1226903120]
+layout_mode = 2
+tooltip_text = "Reset view"
+
+[node name="LightModeBtn" type="OptionButton" parent="ViewportToolbar/HBox" unique_id=1009129944]
+layout_mode = 2
+
+[node name="GridToggleBtn" type="Button" parent="ViewportToolbar/HBox" unique_id=1871051890]
+layout_mode = 2
+tooltip_text = "Toggle reference grid"
+toggle_mode = true
+button_pressed = true

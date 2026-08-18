@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://bv21eewv8oeiy"]
+
+[ext_resource type="Script" uid="uid://cugh44ux4j2eu" path="res://addons/asset_manager/ui/toolbar/toolbar.gd" id="1_4stio"]
+[ext_resource type="PackedScene" uid="uid://82pan0dqp60" path="res://addons/asset_manager/ui/update_check/update_check.tscn" id="2_4vn4q"]
+
+[node name="Toolbar" type="MarginContainer" unique_id=1568603624]
+script = ExtResource("1_4stio")
+
+[node name="HBox" type="HBoxContainer" parent="." unique_id=1015187082]
+layout_mode = 2
+
+[node name="SidebarButton" type="Button" parent="HBox" unique_id=674351668]
+layout_mode = 2
+tooltip_text = "Hide sidebar"
+text = "|<"
+
+[node name="RebuildButton" type="Button" parent="HBox" unique_id=1544584148]
+layout_mode = 2
+tooltip_text = "Rebuild Index"
+text = "Rebuild"
+
+[node name="SearchInput" type="LineEdit" parent="HBox" unique_id=29919236]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Search assets…"
+clear_button_enabled = true
+
+[node name="UpdateCheck" parent="HBox" unique_id=1611457578 instance=ExtResource("2_4vn4q")]
+layout_mode = 2
+
+[node name="SettingsButton" type="Button" parent="HBox" unique_id=1449531195]
+layout_mode = 2
+tooltip_text = "Settings"
+text = "Settings"

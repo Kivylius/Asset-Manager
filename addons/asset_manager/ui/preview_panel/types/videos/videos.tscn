@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://b3ogyb8m5jsra"]
+
+[ext_resource type="Script" uid="uid://cybyy0soa5cd4" path="res://addons/asset_manager/ui/preview_panel/types/videos/videos.gd" id="1_aq126"]
+
+[node name="Videos" type="Control" unique_id=1257005692]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_aq126")
+
+[node name="VBox" type="VBoxContainer" parent="." unique_id=1134654553]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.2
+anchor_right = 0.9
+anchor_bottom = 0.8
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="VideoPanel" type="PanelContainer" parent="VBox" unique_id=1378746767]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VideoFit" type="AspectRatioContainer" parent="VBox/VideoPanel" unique_id=2066649636]
+layout_mode = 2
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="VBox/VideoPanel/VideoFit" unique_id=1984919623]
+layout_mode = 2
+expand = true
+
+[node name="UnsupportedLabel" type="Label" parent="VBox" unique_id=918118443]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+text = "Can't preview. Godot only plays .ogv (Theora) video natively.
+Convert this file to .ogv to preview it here."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="TransportCard" type="PanelContainer" parent="VBox" unique_id=1708793893]
+layout_mode = 2
+
+[node name="TransportBox" type="VBoxContainer" parent="VBox/TransportCard" unique_id=1010752433]
+layout_mode = 2
+
+[node name="ScrubRow" type="HBoxContainer" parent="VBox/TransportCard/TransportBox" unique_id=1991380814]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CurrentTimeLabel" type="Label" parent="VBox/TransportCard/TransportBox/ScrubRow" unique_id=1797146053]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+text = "0:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScrubSlider" type="HSlider" parent="VBox/TransportCard/TransportBox/ScrubRow" unique_id=923277425]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.001
+
+[node name="TotalTimeLabel" type="Label" parent="VBox/TransportCard/TransportBox/ScrubRow" unique_id=235031613]
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+text = "0:00"
+vertical_alignment = 1
+
+[node name="ControlsRow" type="HBoxContainer" parent="VBox/TransportCard/TransportBox" unique_id=180525472]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StopButton" type="Button" parent="VBox/TransportCard/TransportBox/ControlsRow" unique_id=146613016]
+custom_minimum_size = Vector2(40, 36)
+layout_mode = 2
+tooltip_text = "Stop"
+
+[node name="PlayPauseButton" type="Button" parent="VBox/TransportCard/TransportBox/ControlsRow" unique_id=1039760902]
+custom_minimum_size = Vector2(48, 36)
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="VBox/TransportCard/TransportBox/ControlsRow" unique_id=448623551]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VolumeLabel" type="Label" parent="VBox/TransportCard/TransportBox/ControlsRow" unique_id=996825204]
+layout_mode = 2
+text = "Vol"
+vertical_alignment = 1
+
+[node name="VolumeSlider" type="HSlider" parent="VBox/TransportCard/TransportBox/ControlsRow" unique_id=157224640]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+size_flags_vertical = 4
+value = 25.0

@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://b5thnfq1qxwcv"]
+
+[ext_resource type="Script" uid="uid://chgjk6j60luhf" path="res://addons/asset_manager/ui/preview_panel/types/shaders/options.gd" id="1_1ajdr"]
+
+[node name="Options" type="Control" unique_id=581390825]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_1ajdr")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=1915030015]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -600.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel" unique_id=1057153948]
+layout_mode = 2
+
+[node name="Header" type="HBoxContainer" parent="Panel/VBox" unique_id=287246611]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Panel/VBox/Header" unique_id=1459794840]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Shader Options"
+clip_text = true
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VBox" unique_id=2098165767]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="Panel/VBox" unique_id=124631493]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Rows" type="VBoxContainer" parent="Panel/VBox/Scroll" unique_id=931178663]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8

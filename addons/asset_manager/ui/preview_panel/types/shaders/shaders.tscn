@@ -1,0 +1,157 @@
+[gd_scene format=3 uid="uid://cygky7st7w16o"]
+
+[ext_resource type="Script" uid="uid://b7fddn5g5rs3l" path="res://addons/asset_manager/ui/preview_panel/types/shaders/shaders.gd" id="1_nr8dn"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_rcwlb"]
+radius = 1.0
+height = 2.0
+
+[node name="Shaders" type="Control" unique_id=2066619960]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_nr8dn")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=947968628]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1809784327]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport" unique_id=116423690]
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport" unique_id=16667236]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport" unique_id=596220654]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 5, 0)
+
+[node name="SubjectPivot" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=178688115]
+
+[node name="SpatialSubject" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/SubjectPivot" unique_id=503444918]
+mesh = SubResource("SphereMesh_rcwlb")
+
+[node name="ParticlesSubject" type="GPUParticles3D" parent="SubViewportContainer/SubViewport/SubjectPivot" unique_id=286049469]
+visible = false
+emitting = false
+
+[node name="FogSubject" type="FogVolume" parent="SubViewportContainer/SubViewport/SubjectPivot" unique_id=872512714]
+visible = false
+size = Vector3(2.5, 2, 2.5)
+
+[node name="CityblockSubject" type="Node3D" parent="SubViewportContainer/SubViewport/SubjectPivot" unique_id=1321217169]
+visible = false
+
+[node name="CanvasOverlay" type="ColorRect" parent="SubViewportContainer/SubViewport" unique_id=428976781]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="UnsupportedLabel" type="Label" parent="SubViewportContainer" unique_id=623440513]
+visible = false
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="CanvasItemFullscreen" type="ColorRect" parent="." unique_id=1166868148]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CanvasItemAspect" type="AspectRatioContainer" parent="." unique_id=740559869]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CanvasItemDisplay" type="ColorRect" parent="CanvasItemAspect" unique_id=1719709456]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CanvasItemFixedCenter" type="CenterContainer" parent="." unique_id=192994]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CanvasItemFixedDisplay" type="ColorRect" parent="CanvasItemFixedCenter" unique_id=1116986025]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ViewportToolbar" type="MarginContainer" parent="." unique_id=280665418]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+
+[node name="HBox" type="HBoxContainer" parent="ViewportToolbar" unique_id=999714386]
+layout_mode = 2
+
+[node name="ModeLabel" type="Label" parent="ViewportToolbar/HBox" unique_id=1640887099]
+layout_mode = 2
+size_flags_horizontal = 3
+vertical_alignment = 1
+
+[node name="ModeControlsContainer" type="HBoxContainer" parent="ViewportToolbar/HBox" unique_id=388817462]
+layout_mode = 2
+
+[node name="FogShapeOption" type="OptionButton" parent="ViewportToolbar/HBox/ModeControlsContainer" unique_id=380409961]
+visible = false
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+
+[node name="FlipFacesCheckBox" type="CheckBox" parent="ViewportToolbar/HBox/ModeControlsContainer" unique_id=1708966102]
+visible = false
+layout_mode = 2
+text = "Flip Faces"
+
+[node name="SpatialShapeOption" type="OptionButton" parent="ViewportToolbar/HBox/ModeControlsContainer" unique_id=573825989]
+visible = false
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+
+[node name="CanvasDisplayModeOption" type="OptionButton" parent="ViewportToolbar/HBox/ModeControlsContainer" unique_id=207976037]
+visible = false
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+
+[node name="OptionsToggleBtn" type="Button" parent="ViewportToolbar/HBox" unique_id=437140225]
+layout_mode = 2
+toggle_mode = true
+text = "Options"

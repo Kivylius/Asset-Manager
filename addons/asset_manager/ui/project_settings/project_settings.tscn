@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://c3v6qb674lnah"]
+
+[ext_resource type="Script" uid="uid://bbm7qm1v0xaia" path="res://addons/asset_manager/ui/project_settings/project_settings.gd" id="1_np57f"]
+
+[node name="SettingsManager" type="AcceptDialog" unique_id=1201941824]
+title = "Settings"
+script = ExtResource("1_np57f")
+
+[node name="VBox" type="VBoxContainer" parent="." unique_id=2010594839]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+theme_override_constants/separation = 14
+
+[node name="ExportLabel" type="Label" parent="VBox" unique_id=1672060076]
+layout_mode = 2
+text = "Export destinations (this project)"
+
+[node name="ExportRootsVBox" type="VBoxContainer" parent="VBox" unique_id=545418245]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Spacer" type="Control" parent="VBox" unique_id=215213854]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Footer" type="MarginContainer" parent="VBox" unique_id=994379396]
+modulate = Color(1, 1, 1, 0.4)
+layout_mode = 2
+theme_override_constants/margin_bottom = 8
+
+[node name="FooterBox" type="VBoxContainer" parent="VBox/Footer" unique_id=11607183]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="VersionLabel" type="Label" parent="VBox/Footer/FooterBox" unique_id=141760545]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="FooterRow" type="HBoxContainer" parent="VBox/Footer/FooterBox" unique_id=722579557]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="MadeByLabel" type="Label" parent="VBox/Footer/FooterBox/FooterRow" unique_id=1049959561]
+layout_mode = 2
+text = "Made by "
+
+[node name="AuthorLink" type="LinkButton" parent="VBox/Footer/FooterBox/FooterRow" unique_id=901004384]
+layout_mode = 2
+size_flags_vertical = 4
+text = "@kivylius"
+uri = "https://x.com/kivylius"
+
+[node name="FooterSeparator" type="Label" parent="VBox/Footer/FooterBox/FooterRow" unique_id=1276718937]
+layout_mode = 2
+text = " | "
+
+[node name="RepoLink" type="LinkButton" parent="VBox/Footer/FooterBox/FooterRow" unique_id=1926872437]
+layout_mode = 2
+size_flags_vertical = 4
+text = "GitHub"
+uri = "https://github.com/Kivylius/Asset-Manager"

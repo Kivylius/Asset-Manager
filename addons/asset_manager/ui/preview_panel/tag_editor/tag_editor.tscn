@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://dbvjytlbhql11"]
+
+[ext_resource type="Script" uid="uid://dskm6mmifulhj" path="res://addons/asset_manager/ui/preview_panel/tag_editor/tag_editor.gd" id="1_7ld84"]
+
+[node name="TagEditor" type="VBoxContainer" unique_id=1754363508]
+script = ExtResource("1_7ld84")
+
+[node name="VBox" type="VBoxContainer" parent="." unique_id=1433869560]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="DisplayRow" type="HFlowContainer" parent="VBox" unique_id=416006639]
+layout_mode = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+alignment = 1
+
+[node name="EditButton" type="Button" parent="VBox/DisplayRow" unique_id=1221245398]
+layout_mode = 2
+tooltip_text = "Edit tags"
+focus_mode = 0
+flat = true
+
+[node name="TagsRow" type="HBoxContainer" parent="VBox" unique_id=628235994]
+z_index = 10
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TagInputField" type="LineEdit" parent="VBox/TagsRow" unique_id=518353545]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "+ add tag..."
+
+[node name="AddTagButton" type="Button" parent="VBox/TagsRow" unique_id=1612013357]
+visible = false
+layout_mode = 2
+tooltip_text = "Add as new tag"
+text = "+"
+
+[node name="ExpandPanel" type="MarginContainer" parent="VBox" unique_id=561525242]
+visible = false
+layout_mode = 2
+
+[node name="SuggestionCard" type="PanelContainer" parent="VBox/ExpandPanel" unique_id=1399360754]
+layout_mode = 2
+
+[node name="SuggestionScroll" type="ScrollContainer" parent="VBox/ExpandPanel/SuggestionCard" unique_id=1065924931]
+layout_mode = 2
+vertical_scroll_mode = 0
+
+[node name="AvailableTagsFlowContainer" type="HBoxContainer" parent="VBox/ExpandPanel/SuggestionCard/SuggestionScroll" unique_id=1796280903]
+layout_mode = 2
+
+[node name="TagFlowContainer" type="HFlowContainer" parent="VBox" unique_id=55832231]
+layout_mode = 2
+mouse_filter = 2
+alignment = 1

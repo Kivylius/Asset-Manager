@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://befx1hxq27fy7"]
+
+[ext_resource type="Script" uid="uid://b5if88tchlr2r" path="res://addons/asset_manager/ui/sidebar/sidebar.gd" id="1_nt5li"]
+
+[node name="Sidebar" type="VBoxContainer" unique_id=1119379896]
+script = ExtResource("1_nt5li")
+
+[node name="AssetTree" type="Tree" parent="." unique_id=652480358]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 2
+allow_rmb_select = true
+hide_root = true
+select_mode = 1

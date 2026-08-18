@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://smvg7jviqeij"]
+
+[ext_resource type="Script" uid="uid://ci57w856m5feq" path="res://addons/asset_manager/ui/preview_panel/types/images/images.gd" id="1_jjvhd"]
+
+[node name="Images" type="Control" unique_id=60366222]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_jjvhd")
+
+[node name="CheckerboardRect" type="TextureRect" parent="." unique_id=1237544198]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 1
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1872882240]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CheckerboardToggleBtn" type="Button" parent="." unique_id=2028263293]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -48.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 48.0
+grow_horizontal = 0
+tooltip_text = "Toggle checkerboard background"
+toggle_mode = true
+button_pressed = true
