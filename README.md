@@ -20,16 +20,16 @@
 
 </div>
 
-Manange all your Godot assets in a single place, get previews and send files directly into project(s). Supports godot 4.x on Mac/Linux & Windows.
+Manange all your Godot assets in a single place, get previews and send files directly into project(s). Supports Godot 4.x on Mac/Linux & Windows.
 
 ## Key Features
 
 - Shared asset library outside any project
-- Live preview for 3DModels, Materials, Shaders, Effects/VFX, Audio Video and Images
-- Search & Filtering across your whole assets directory
-- Multi-workspace support & Shared assets for collaboration
+- Live preview for models, materials, shaders, effects/vfx, audio, video and images
+- Search & filtering across your whole assets directory
+- Multi-workspace support & shared assets for collaboration
 - Tagging assets with custom names
-- Thumbnail Generation for all asset types
+- Thumbnail generation for all asset types
 - Export destination per project/game
 - Grid & list toggable views
 
