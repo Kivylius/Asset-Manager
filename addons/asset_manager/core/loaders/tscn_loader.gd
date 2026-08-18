@@ -76,7 +76,7 @@ static func _load_external_inner(path: String, bucket: String = DEFAULT_BUCKET) 
 			i = _apply_properties(lines, i + 1, obj, ext_resources, sub_resources) - 1
 			sub_resources[id] = obj
 
-		el		if line.begins_with("[node"):
+		elif line.begins_with("[node"):
 			var fields := _parse_tag_fields(line)
 			var type: String = fields.get("type", "")
 			var name: String = fields.get("name", "")
