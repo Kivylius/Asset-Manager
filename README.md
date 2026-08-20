@@ -13,7 +13,7 @@
 <div align="center">
 
 [![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](https://github.com/kivylius/asset-manager/blob/main/LICENSE)
-[![Versions](https://img.shields.io/badge/versions-v1.0.2-green.svg)](https://github.com/kivylius/asset-manager/releases)
+[![Versions](https://img.shields.io/badge/versions-v1.0.3-green.svg)](https://github.com/kivylius/asset-manager/releases)
 [![Platform](https://img.shields.io/badge/godot-4.x-red.svg)](https://github.com/kivylius/asset-manager)
 [![Language](https://img.shields.io/badge/Language-GDscript-pink.svg)](https://github.com/kivylius/asset-manager)
 [![Made with Godot](https://img.shields.io/badge/Made%20with-Godot-478CBF?style=flat&logo=godot%20engine&logoColor=white)](https://godotengine.org)

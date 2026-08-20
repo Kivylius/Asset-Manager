@@ -42,6 +42,13 @@ const ALL: Array[Dictionary] = [
 		"default_export_path": "res://assets/videos"
 	},
 	{
+		"id": "hdris",
+		"label": "HDRIs",
+		"extensions": ["hdr", "exr"],
+		"default_icon": "PanoramaSkyMaterial",
+		"default_export_path": "res://assets/hdris"
+	},
+	{
 		"id": "materials",
 		"label": "Materials",
 		"extensions": ["tres"],

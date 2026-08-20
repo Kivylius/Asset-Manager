@@ -13,6 +13,7 @@ const KEY_LIGHT_MODE_IDX: String = "light_mode_idx"
 const KEY_GRID_VISIBLE: String = "preview_grid_visible"
 const KEY_CHECKERBOARD_VISIBLE: String = "image_checkerboard_visible"
 const KEY_MATERIAL_SHAPE_IDX: String = "material_shape_idx"
+const KEY_HDRI_SURFACE_IDX: String = "hdri_surface_idx"
 const KEY_SHADER_OPTIONS_OPEN: String = "shader_options_open"
 const KEY_SHADER_CANVAS_DISPLAY_MODE_IDX: String = "shader_canvas_display_mode_idx"
 const KEY_SIDEBAR_WIDTH: String = "sidebar_width"
@@ -26,6 +27,7 @@ const DEFAULT_LIGHT_MODE_IDX: int = 0
 const DEFAULT_GRID_VISIBLE: bool = true
 const DEFAULT_CHECKERBOARD_VISIBLE: bool = true
 const DEFAULT_MATERIAL_SHAPE_IDX: int = 0
+const DEFAULT_HDRI_SURFACE_IDX: int = 0
 const DEFAULT_SHADER_OPTIONS_OPEN: bool = true
 const DEFAULT_SHADER_CANVAS_DISPLAY_MODE_IDX: int = 2
 
@@ -79,6 +81,12 @@ func get_material_shape_idx() -> int:
 
 func set_material_shape_idx(value: int) -> void:
 	_set_pref(KEY_MATERIAL_SHAPE_IDX, value)
+
+func get_hdri_surface_idx() -> int:
+	return AssetManagerConfig.get_value(SECTION, KEY_HDRI_SURFACE_IDX, DEFAULT_HDRI_SURFACE_IDX)
+
+func set_hdri_surface_idx(value: int) -> void:
+	_set_pref(KEY_HDRI_SURFACE_IDX, value)
 
 func get_shader_options_open() -> bool:
 	return AssetManagerConfig.get_value(SECTION, KEY_SHADER_OPTIONS_OPEN, DEFAULT_SHADER_OPTIONS_OPEN)

@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://vae26iqw40fj"]
+
+[ext_resource type="Script" uid="uid://c1lci6asvxlsr" path="res://addons/asset_manager/ui/preview_panel/types/hdris/hdris.gd" id="1_cgsft"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ataic"]
+radius = 1.0
+height = 2.0
+
+[node name="Hdris" type="Control" unique_id=1029100512]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_cgsft")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=583091916]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=138699675]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+size_2d_override = Vector2i(223, 120)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport" unique_id=1720956449]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
+current = true
+
+[node name="HdriPivot" type="Node3D" parent="SubViewportContainer/SubViewport" unique_id=101309754]
+
+[node name="PreviewMesh" type="MeshInstance3D" parent="SubViewportContainer/SubViewport/HdriPivot" unique_id=1488858390]
+mesh = SubResource("SphereMesh_ataic")
+
+[node name="ViewportToolbar" type="MarginContainer" parent="." unique_id=1992009225]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+
+[node name="HBox" type="HBoxContainer" parent="ViewportToolbar" unique_id=1652973336]
+layout_mode = 2
+alignment = 2
+
+[node name="SurfaceToggleBtn" type="OptionButton" parent="ViewportToolbar/HBox" unique_id=382981397]
+layout_mode = 2

@@ -8,6 +8,7 @@ extends RefCounted
 
 const HANDLERS: Dictionary = {
 	"models": preload("res://addons/asset_manager/core/types/models/export.gd"),
+	"hdris": preload("res://addons/asset_manager/core/types/hdris/export.gd"),
 	"materials": preload("res://addons/asset_manager/core/types/materials/export.gd"),
 	"shaders": preload("res://addons/asset_manager/core/types/shaders/export.gd"),
 	"effects": preload("res://addons/asset_manager/core/types/effects/export.gd"),

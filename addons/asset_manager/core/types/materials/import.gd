@@ -193,7 +193,7 @@ static func _write_tres(tres_path: String, folder_path: String, resolved: Dictio
 
 		id_counter += 1
 		var resource_id := "Tex%d" % id_counter
-		ext_resource_lines.append('[ext_resource type="Texture2D" uid="%s" id="%s" path="./%s"]' % [ResourceUidText.generate(), resource_id, rel_filename])
+		ext_resource_lines.append('[ext_resource type="Texture2D" id="%s" path="./%s"]' % [resource_id, rel_filename])
 		resource_lines.append('%s = ExtResource("%s")' % [property_name, resource_id])
 
 		if ENABLE_FLAG_FOR_PROPERTY.has(property_name):
@@ -202,9 +202,9 @@ static func _write_tres(tres_path: String, folder_path: String, resolved: Dictio
 			resource_lines.append("%s = %d" % [TEXTURE_CHANNEL_PROPERTY[channel], TEXTURE_CHANNEL_GRAY])
 
 	if resolved.has("opacity"):
-		resource_lines.append("transparency = 1") # alpha ones
+		resource_lines.append("transparency = 1") # Alpha scissor.
 
-	file.store_line('[gd_resource type="StandardMaterial3D" load_steps=%d format=3 uid="%s"]' % [ext_resource_lines.size() + 1, ResourceUidText.generate()])
+	file.store_line('[gd_resource type="StandardMaterial3D" format=3 uid="%s"]' % ResourceUidText.generate())
 	file.store_line("")
 	for line in ext_resource_lines:
 		file.store_line(line)

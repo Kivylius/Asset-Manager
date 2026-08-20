@@ -432,13 +432,16 @@ func capture(subject: Node3D) -> Image:
 ## A sky has no subject to frame, it *is* the background. The camera stays put
 ## and looks slightly above the horizon, which is where a sky shader's gradient
 ## and horizon band are, rather than straight up at flat zenith colour.
-func capture_sky(material: Material) -> Image:
+const SKY_FOV: float = 75.0
+
+func capture_sky(material: Material, fov: float = SKY_FOV, tonemap: int = -1) -> Image:
 	if not is_instance_valid(_viewport):
 		return null
 
 	var env := _viewport.world_3d.environment
 	var previous_background := env.background_mode
 	var previous_sky := env.sky
+	var previous_tonemap := env.tonemap_mode
 
 	# The viewport is transparent for models, but a sky IS the background, with
 	# transparency on, the alpha channel wins and the tile comes back empty.
@@ -448,9 +451,11 @@ func capture_sky(material: Material) -> Image:
 	sky.sky_material = material
 	env.sky = sky
 	env.background_mode = Environment.BG_SKY
+	if tonemap >= 0:
+		env.tonemap_mode = tonemap
 
 	_camera.projection = Camera3D.PROJECTION_PERSPECTIVE
-	_camera.fov = 75.0
+	_camera.fov = fov
 	_camera.global_position = Vector3.ZERO
 	_camera.look_at(Vector3(0, 0.25, -1), Vector3.UP)
 
@@ -458,6 +463,7 @@ func capture_sky(material: Material) -> Image:
 
 	env.background_mode = previous_background
 	env.sky = previous_sky
+	env.tonemap_mode = previous_tonemap
 	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
 	_viewport.transparent_bg = true
 

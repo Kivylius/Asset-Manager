@@ -47,9 +47,9 @@ static func _write_material_tres(dest_path: String, result: Dictionary) -> void:
 		result["errors"].append("Failed to write companion .tres: " + tres_path)
 		return
 
-	file.store_line('[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="%s"]' % ResourceUidText.generate())
+	file.store_line('[gd_resource type="ShaderMaterial" format=3 uid="%s"]' % ResourceUidText.generate())
 	file.store_line("")
-	file.store_line('[ext_resource type="Shader" uid="%s" path="./%s" id="1_shader"]' % [ResourceUidText.generate(), shader_filename])
+	file.store_line('[ext_resource type="Shader" path="./%s" id="1_shader"]' % shader_filename)
 	file.store_line("")
 	file.store_line("[resource]")
 	file.store_line('shader = ExtResource("1_shader")')
@@ -69,9 +69,9 @@ static func _write_particles_tscn(dest_path: String, result: Dictionary) -> void
 		result["errors"].append("Failed to write companion .tscn: " + tscn_path)
 		return
 
-	file.store_line('[gd_scene load_steps=4 format=3 uid="%s"]' % ResourceUidText.generate())
+	file.store_line('[gd_scene format=3 uid="%s"]' % ResourceUidText.generate())
 	file.store_line("")
-	file.store_line('[ext_resource type="Shader" uid="%s" path="./%s" id="1_shader"]' % [ResourceUidText.generate(), shader_filename])
+	file.store_line('[ext_resource type="Shader" path="./%s" id="1_shader"]' % shader_filename)
 	file.store_line("")
 	file.store_line('[sub_resource type="ShaderMaterial" id="ShaderMaterial_1"]')
 	file.store_line('shader = ExtResource("1_shader")')
@@ -101,9 +101,9 @@ static func _write_fog_tscn(dest_path: String, result: Dictionary) -> void:
 		result["errors"].append("Failed to write companion .tscn: " + tscn_path)
 		return
 
-	file.store_line('[gd_scene load_steps=3 format=3 uid="%s"]' % ResourceUidText.generate())
+	file.store_line('[gd_scene format=3 uid="%s"]' % ResourceUidText.generate())
 	file.store_line("")
-	file.store_line('[ext_resource type="Shader" uid="%s" path="./%s" id="1_shader"]' % [ResourceUidText.generate(), shader_filename])
+	file.store_line('[ext_resource type="Shader" path="./%s" id="1_shader"]' % shader_filename)
 	file.store_line("")
 	file.store_line('[sub_resource type="FogMaterial" id="FogMaterial_1"]')
 	file.store_line('shader = ExtResource("1_shader")')
@@ -127,9 +127,9 @@ static func _write_sky_tscn(dest_path: String, result: Dictionary) -> void:
 		result["errors"].append("Failed to write companion .tscn: " + tscn_path)
 		return
 
-	file.store_line('[gd_scene load_steps=5 format=3 uid="%s"]' % ResourceUidText.generate())
+	file.store_line('[gd_scene format=3 uid="%s"]' % ResourceUidText.generate())
 	file.store_line("")
-	file.store_line('[ext_resource type="Shader" uid="%s" path="./%s" id="1_shader"]' % [ResourceUidText.generate(), shader_filename])
+	file.store_line('[ext_resource type="Shader" path="./%s" id="1_shader"]' % shader_filename)
 	file.store_line("")
 	file.store_line('[sub_resource type="ShaderMaterial" id="ShaderMaterial_1"]')
 	file.store_line('shader = ExtResource("1_shader")')

@@ -15,6 +15,7 @@ const TYPE_SCENES: Dictionary = {
 	"music": preload("res://addons/asset_manager/ui/preview_panel/types/audio/audio.tscn"),
 	"images": preload("res://addons/asset_manager/ui/preview_panel/types/images/images.tscn"),
 	"videos": preload("res://addons/asset_manager/ui/preview_panel/types/videos/videos.tscn"),
+	"hdris": preload("res://addons/asset_manager/ui/preview_panel/types/hdris/hdris.tscn"),
 	"materials": preload("res://addons/asset_manager/ui/preview_panel/types/materials/materials.tscn"),
 	"shaders": preload("res://addons/asset_manager/ui/preview_panel/types/shaders/shaders.tscn"),
 	"effects": preload("res://addons/asset_manager/ui/preview_panel/types/effects/effects.tscn"),
