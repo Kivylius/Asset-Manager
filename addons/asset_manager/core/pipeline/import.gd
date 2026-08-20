@@ -46,6 +46,7 @@ func run_import(workspace_path: String, database: AssetDatabase, viewport_host: 
 		await _type_done
 
 	progress.emit({"stage": "database", "label": "index.db", "current": 0, "total": 1})
+	_drop_rare_tags(_scanned)
 	if not database.rebuild(_scanned):
 		return false
 	progress.emit({"stage": "database", "label": "index.db", "current": 1, "total": 1})
@@ -64,6 +65,16 @@ func run_import(workspace_path: String, database: AssetDatabase, viewport_host: 
 	database.update_subtypes(stage.take_subtypes())
 
 	return true
+
+static func _drop_rare_tags(entries: Array[Dictionary]) -> void:
+	var counts: Dictionary = {}
+	for entry in entries:
+		for tag in entry["tags"]:
+			counts[tag] = counts.get(tag, 0) + 1
+
+	for entry in entries:
+		entry["tags"] = entry["tags"].filter(
+			func(tag: String) -> bool: return counts[tag] > 1)
 
 func _dispatch_type(bucket_root_path: String, type_entry: Dictionary, chain: Array) -> void:
 	_pending_count += 1

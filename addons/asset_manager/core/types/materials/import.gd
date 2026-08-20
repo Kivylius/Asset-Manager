@@ -47,11 +47,43 @@ static func run(bucket_root_path: String, _type_entry: Dictionary) -> Array[Dict
 	while folder_name != "":
 		if dir.current_is_dir() and folder_name != "." and folder_name != "..":
 			var folder_path := bucket_root_path.path_join(folder_name)
-			result.append_array(_run_one_folder(folder_path, _list_files_flat(folder_path)))
+			_collect(folder_path, folder_name, result)
 		folder_name = dir.get_next()
 	dir.list_dir_end()
 
 	return result
+
+static func _collect(folder_path: String, material_name: String, result: Array[Dictionary]) -> void:
+	var files := _list_files_flat(folder_path)
+
+	if _has_usable_images(files):
+		result.append_array(_run_one_folder(folder_path, files, material_name))
+		return
+
+	for sub in _list_subfolders(folder_path):
+		_collect(folder_path.path_join(sub), material_name, result)
+
+static func _has_usable_images(file_names: PackedStringArray) -> bool:
+	for f in file_names:
+		if not IMAGE_EXTENSIONS.has(f.get_extension().to_lower()):
+			continue
+		if MaterialClassifier.is_albedo_file(f):
+			return true
+	return false
+
+static func _list_subfolders(folder_path: String) -> PackedStringArray:
+	var names := PackedStringArray()
+	var dir := DirAccess.open(folder_path)
+	if dir == null:
+		return names
+	dir.list_dir_begin()
+	var name := dir.get_next()
+	while name != "":
+		if dir.current_is_dir() and name != "." and name != "..":
+			names.append(name)
+		name = dir.get_next()
+	dir.list_dir_end()
+	return names
 
 static func _list_files_flat(folder_path: String) -> PackedStringArray:
 	var files := PackedStringArray()
@@ -67,7 +99,7 @@ static func _list_files_flat(folder_path: String) -> PackedStringArray:
 	dir.list_dir_end()
 	return files
 
-static func _run_one_folder(folder_path: String, file_names: PackedStringArray) -> Array[Dictionary]:
+static func _run_one_folder(folder_path: String, file_names: PackedStringArray, material_name: String) -> Array[Dictionary]:
 	var existing_tres := _find_existing_tres(file_names)
 	if not existing_tres.is_empty():
 		return [_entry_for_tres(folder_path, existing_tres)]
@@ -82,13 +114,18 @@ static func _run_one_folder(folder_path: String, file_names: PackedStringArray) 
 		if info["status"] == "OK":
 			resolved[info["channel"]] = f
 
-	var albedo_rel_path: String = resolved["albedo"]
+	var albedo_file: String = resolved["albedo"]
+	var albedo_rel_path: String = albedo_file
 	if resolved.has("opacity"):
-		var composited := _composite_opacity(folder_path, resolved["albedo"], resolved["opacity"])
+		var composited := _composite_opacity(folder_path, albedo_file, resolved["opacity"])
 		if not composited.is_empty():
 			albedo_rel_path = composited
 
-	var tres_filename := folder_path.get_file() + ".tres"
+	var fragment: String = report["files"][albedo_file]["matched_fragment"]
+	var derived := "_".join(Array(albedo_file.get_basename().split("_")).filter(
+		func(part: String) -> bool: return part.to_lower() != fragment))
+
+	var tres_filename := (derived if not derived.is_empty() else material_name) + ".tres"
 	var tres_path := folder_path.path_join(tres_filename)
 	_write_tres(tres_path, folder_path, resolved, albedo_rel_path)
 

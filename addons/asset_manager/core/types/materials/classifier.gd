@@ -156,6 +156,13 @@ static func _is_sixteen_bit_file(filename: String) -> bool:
 			return true
 	return false
 
+static func is_albedo_file(filename: String) -> bool:
+	_ensure_static_state()
+	if _is_preview_file(filename):
+		return false
+	var match := _match_tokens(_tokenize(filename))
+	return not match.is_empty() and match["channel"] == "albedo"
+
 static func _is_preview_file(filename: String) -> bool:
 	for token in _tokenize(filename):
 		if PREVIEW_TOKENS.has(token):

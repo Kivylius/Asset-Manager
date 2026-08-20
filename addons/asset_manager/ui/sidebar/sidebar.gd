@@ -33,7 +33,18 @@ var _collapsed_sections: Dictionary = {}
 ## (editor_node.cpp:9301).
 const BASE_MIN_WIDTH: int = 170
 const BASE_DEFAULT_WIDTH: int = 280
-const BASE_COUNT_COLUMN_WIDTH: int = 48
+const BASE_COUNT_COLUMN_WIDTH: int = 80
+
+## Convert from 1150 => 1.1k to fit the sidebar
+static func format_count(count: int) -> String:
+	if count < 1000:
+		return str(count)
+	var unit := 1000 if count < 1000000 else 1000000
+	var suffix := "k" if count < 1000000 else "m"
+	var whole := count / unit
+	if whole >= 100:
+		return "%d%s" % [whole, suffix]
+	return "%d.%d%s" % [whole, (count % unit) * 10 / unit, suffix]
 
 func _ready() -> void:
 	if EditorGuard.is_scene_tab(self):
@@ -118,7 +129,12 @@ func _gather_stats() -> Dictionary:
 
 			var second_slash := rest.find("/")
 			if second_slash != -1:
-				folders[type_id]["subfolders"][rest.substr(0, second_slash)] = true
+				var sub_name := rest.substr(0, second_slash)
+				var children: Dictionary = folders[type_id]["subfolders"].get_or_add(sub_name, {})
+				var deeper := rest.substr(second_slash + 1)
+				var third_slash := deeper.find("/")
+				if third_slash != -1:
+					children[deeper.substr(0, third_slash)] = true
 
 		# Tag and extension counts are scoped to the active folder, so a count
 		# always describes what clicking it would actually give you.
@@ -137,7 +153,7 @@ func _gather_stats() -> Dictionary:
 ## clears the folder filter.
 func _build_assets(root: TreeItem, stats: Dictionary) -> void:
 	var section := _make_section(root, "assets", "Assets", "Folder")
-	section.set_text(COL_COUNT, str(stats["total"]))
+	section.set_text(COL_COUNT, format_count(stats["total"]))
 	section.set_text_alignment(COL_COUNT, HORIZONTAL_ALIGNMENT_RIGHT)
 	section.set_custom_color(COL_COUNT, _count_colour())
 	# Selectable, so it doesn't fold like the other two headers. Clicking it
@@ -156,7 +172,7 @@ func _build_assets(root: TreeItem, stats: Dictionary) -> void:
 		var type_prefix := workspace_path.path_join(type_id)
 		var item := _tree.create_item(section)
 		item.set_text(COL_NAME, type_id)
-		item.set_text(COL_COUNT, str(folders[type_id]["count"]))
+		item.set_text(COL_COUNT, format_count(folders[type_id]["count"]))
 		item.set_text_alignment(COL_COUNT, HORIZONTAL_ALIGNMENT_RIGHT)
 		item.set_custom_color(COL_COUNT, _count_colour())
 		item.set_metadata(COL_NAME, {"type": "folder", "path": type_prefix, "type_id": type_id})
@@ -166,9 +182,21 @@ func _build_assets(root: TreeItem, stats: Dictionary) -> void:
 		var subfolders: Array = folders[type_id]["subfolders"].keys()
 		subfolders.sort()
 		for name: String in subfolders:
+			var sub_prefix := type_prefix.path_join(name)
 			var sub := _tree.create_item(item)
 			sub.set_text(COL_NAME, name)
-			sub.set_metadata(COL_NAME, {"type": "folder", "path": type_prefix.path_join(name), "type_id": type_id})
+			sub.set_metadata(COL_NAME, {"type": "folder", "path": sub_prefix, "type_id": type_id})
+
+			var children: Array = folders[type_id]["subfolders"][name].keys()
+			children.sort()
+			if children.size() < 2:
+				children.clear()
+			for child_name: String in children:
+				var child := _tree.create_item(sub)
+				child.set_text(COL_NAME, child_name)
+				child.set_metadata(COL_NAME, {"type": "folder", "path": sub_prefix.path_join(child_name), "type_id": type_id})
+
+			sub.collapsed = not active_folder_prefix.begins_with(sub_prefix)
 
 		# Only the branch you're in opens, so nine types don't fill the panel.
 		item.collapsed = not active_folder_prefix.begins_with(type_prefix)
@@ -240,7 +268,7 @@ func _make_checkbox(parent: TreeItem, label: String, count: int, checked: bool, 
 	var item := _tree.create_item(parent)
 	item.set_cell_mode(COL_NAME, TreeItem.CELL_MODE_CHECK)
 	item.set_text(COL_NAME, label)
-	item.set_text(COL_COUNT, str(count))
+	item.set_text(COL_COUNT, format_count(count))
 	item.set_text_alignment(COL_COUNT, HORIZONTAL_ALIGNMENT_RIGHT)
 	item.set_custom_color(COL_COUNT, _count_colour())
 	item.set_editable(COL_NAME, true)
