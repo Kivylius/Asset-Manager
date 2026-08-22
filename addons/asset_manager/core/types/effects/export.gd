@@ -48,13 +48,12 @@ static func _repoint_binaries(copy_map: Dictionary, pack_root: String, result: D
 		if not BinaryResource.is_binary(dep_source):
 			continue
 
-		var referencing_dest := str(copy_map[dep_source])
 		var path_map: Dictionary = {}
 		for baked_path in _baked_paths_in(dep_source):
 			var real_source := TscnSceneLoader.resolve_pack_path(baked_path, dep_source.get_base_dir(), pack_root)
 			if real_source.is_empty() or not copy_map.has(real_source):
 				continue
-			path_map[baked_path] = _resource_path(referencing_dest, str(copy_map[real_source]))
+			path_map[baked_path] = ProjectSettings.localize_path(str(copy_map[real_source]))
 
 		if path_map.is_empty():
 			continue
@@ -191,7 +190,6 @@ static func _rewrite_dependencies(copy_map: Dictionary, pack_root: String, resul
 
 static func _rewrite_text(text: String, dep_source: String, pack_root: String, copy_map: Dictionary) -> String:
 	var base_dir := dep_source.get_base_dir()
-	var referencing_dest := str(copy_map[dep_source])
 
 	var regex := RegEx.new()
 	regex.compile('\\[ext_resource[^\\]]*\\]')
@@ -210,28 +208,12 @@ static func _rewrite_text(text: String, dep_source: String, pack_root: String, c
 		if resolved.is_empty() or not copy_map.has(resolved):
 			continue
 
-		var new_path := _resource_path(referencing_dest, str(copy_map[resolved]))
+		var new_path := ProjectSettings.localize_path(str(copy_map[resolved]))
 		var new_tag := tag.replace('path="' + raw_path + '"', 'path="' + new_path + '"')
 		new_tag = _strip_uid_attribute(new_tag)
 		out = out.replace(tag, new_tag)
 
 	return out
-
-static func _resource_path(from_file: String, to_file: String) -> String:
-	var localized := ProjectSettings.localize_path(to_file)
-	if localized.begins_with("res://"):
-		return localized
-
-	var from_parts := from_file.get_base_dir().simplify_path().split("/", false)
-	var to_parts := to_file.simplify_path().split("/", false)
-	while not from_parts.is_empty() and not to_parts.is_empty() and from_parts[0] == to_parts[0]:
-		from_parts.remove_at(0)
-		to_parts.remove_at(0)
-	var relative: Array[String] = []
-	for _i in range(from_parts.size()):
-		relative.append("..")
-	relative.append_array(to_parts)
-	return "/".join(relative)
 
 static func _strip_uid_attribute(tag: String) -> String:
 	var uid_re := RegEx.new()

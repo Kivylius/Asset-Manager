@@ -30,7 +30,6 @@ const PROGRESS_DIALOG_SCENE := preload("res://addons/asset_manager/ui/import_pro
 @onready var _preview: PreviewPanel = $MarginContainer/RootVBox/MainSplit/ContentSplit/PreviewPanel
 @onready var folder_dialog: FileDialog = $FolderDialog
 @onready var add_files_dialog: FileDialog = $AddFilesDialog
-@onready var add_result_dialog: AcceptDialog = $AddResultDialog
 @onready var project_settings_dialog: ProjectSettingsDialog = $ProjectSettingsDialog
 @onready var tag_context_menu: PopupMenu = $TagContextMenu
 
@@ -175,33 +174,20 @@ func _on_add_files_selected(paths: PackedStringArray) -> void:
 
 	sync_if_stale()
 	toolbar.set_rebuilding(true)
-	_progress_dialog.start("Adding Files")
+	_progress_dialog.start()
 
 	var importer := AssetImporter.new()
 	importer.progress.connect(_progress_dialog.on_progress)
-	var outcome: Dictionary = await importer.add_files(paths, current_workspace_path)
-	var copy_result: Dictionary = outcome["copy"]
-
-	var indexed := await importer.run_incremental(
-		outcome["entries"], current_workspace_path, _database, self)
-	if not indexed:
-		copy_result["errors"].append("Could not update the asset index.")
+	var result := await importer.add_files(paths, current_workspace_path)
+	if not _database.add_entries(result["entries"]):
+		result["errors"].append("Could not update the asset index.")
 	else:
 		_refresh_all_after_index_change()
 
 	_progress_dialog.finish()
 	toolbar.set_rebuilding(false)
-	_finish_adding(outcome)
-
-func _finish_adding(outcome: Dictionary) -> void:
-	var result: Dictionary = outcome["copy"]
-	add_result_dialog.dialog_text = "%d asset(s) added, %d existing, %d ignored, %d error(s)." % [
-		outcome["entries"].size(), result["skipped_existing_count"],
-		outcome["ignored_count"], result["errors"].size(),
-	]
 	for error_message in result["errors"]:
 		push_error("AssetManager: ", error_message)
-	add_result_dialog.popup_centered()
 
 func _on_add_tag_requested(tag_text: String) -> void:
 	sync_if_stale()

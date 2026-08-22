@@ -67,80 +67,36 @@ func run_import(workspace_path: String, database: AssetDatabase, viewport_host: 
 
 	return true
 
-## Copies selected files into their matching workspace buckets. Ambiguous
-## extensions use the first matching type in AssetTypes.ALL.
+## Copies selected PNG files into the images bucket.
 func add_files(source_paths: PackedStringArray, workspace_path: String) -> Dictionary:
-	progress.emit({"stage": "scan", "stage_label": "Copying files", "current": 0, "total": source_paths.size()})
+	progress.emit({"stage": "scan", "current": 0, "total": source_paths.size()})
 	var task_id := WorkerThreadPool.add_task(func() -> void:
 		call_deferred("emit_signal", "_files_done", _copy_files(source_paths, workspace_path))
 	)
 	var outcome: Dictionary = await _files_done
 	WorkerThreadPool.wait_for_task_completion(task_id)
-	progress.emit({"stage": "scan", "stage_label": "Copying files", "current": source_paths.size(), "total": source_paths.size()})
+	progress.emit({"stage": "scan", "current": source_paths.size(), "total": source_paths.size()})
 	return outcome
-
-static func type_id_for_path(path: String) -> String:
-	var extension := path.get_extension().to_lower()
-	for type_entry in AssetTypes.ALL:
-		if extension in type_entry["extensions"]:
-			return type_entry["id"]
-	return ""
 
 static func _copy_files(source_paths: PackedStringArray, workspace_path: String) -> Dictionary:
-	var outcome := {
-		"copy": AssetExporter.new_result(),
-		"entries": [] as Array[Dictionary],
-		"ignored_count": 0,
-	}
+	var result := AssetExporter.new_result()
+	result["entries"] = [] as Array[Dictionary]
 
 	for source_path in source_paths:
-		var type_id := type_id_for_path(source_path)
-		if type_id.is_empty():
-			outcome["ignored_count"] += 1
+		if source_path.get_extension().to_lower() != "png":
 			continue
 		if source_path.begins_with(workspace_path.trim_suffix("/") + "/"):
-			outcome["copy"]["skipped_existing_count"] += 1
+			result["skipped_existing_count"] += 1
 			continue
 
-		var destination_dir := workspace_path.path_join(type_id)
-		if type_id == "materials":
-			destination_dir = destination_dir.path_join(source_path.get_basename().get_file())
-		var destination_path := destination_dir.path_join(source_path.get_file())
+		var destination_path := workspace_path.path_join("images").path_join(source_path.get_file())
 		var existed := FileAccess.file_exists(destination_path)
-		var result := AssetExporter.export_asset(source_path, destination_dir, type_id, workspace_path)
-		_merge_copy_result(outcome["copy"], result)
+		AssetExporter.copy_one_file(source_path, destination_path, result)
 
 		if not existed and FileAccess.file_exists(destination_path):
-			outcome["entries"].append({"path": destination_path, "type": type_id, "tags": []})
+			result["entries"].append({"path": destination_path, "type": "images", "tags": []})
 
-	return outcome
-
-static func _merge_copy_result(target: Dictionary, addition: Dictionary) -> void:
-	target["copied_count"] += addition["copied_count"]
-	target["skipped_existing_count"] += addition["skipped_existing_count"]
-	target["errors"].append_array(addition["errors"])
-	target["copied_paths"].append_array(addition["copied_paths"])
-
-## Adds known scan entries to the existing index and generates thumbnails only
-## for those entries. Used by Add Files so the cost does not scale with the
-## size of the whole workspace.
-func run_incremental(entries: Array[Dictionary], workspace_path: String, database: AssetDatabase, viewport_host: Node = null) -> bool:
-	if entries.is_empty():
-		return true
-
-	progress.emit({"stage": "database", "label": "index.db", "current": 0, "total": 1})
-	if not database.add_entries(entries):
-		return false
-	progress.emit({"stage": "database", "label": "index.db", "current": 1, "total": 1})
-
-	var cache := ThumbnailCache.new()
-	cache.setup(workspace_path)
-	var stage := ThumbnailStage.new()
-	stage.setup(cache, viewport_host)
-	stage.progress.connect(func(info: Dictionary) -> void: progress.emit(info))
-	await stage.run(entries)
-
-	return database.update_subtypes(stage.take_subtypes())
+	return result
 
 static func _drop_rare_tags(entries: Array[Dictionary]) -> void:
 	var counts: Dictionary = {}

@@ -95,15 +95,12 @@ file_mode = 2
 access = 2
 
 [node name="AddFilesDialog" type="FileDialog" parent="."]
-title = "Add Files to Asset Manager"
+title = "Add PNGs to Asset Manager"
 size = Vector2i(900, 650)
-ok_button_text = "Add Files"
+ok_button_text = "Add PNGs"
 file_mode = 1
 access = 2
-filters = PackedStringArray("*.exr, *.fbx, *.gdshader, *.glb, *.gltf, *.hdr, *.jpeg, *.jpg, *.mp3, *.ogg, *.ogv, *.png, *.tres, *.tscn, *.wav, *.webp ; Supported asset files")
-
-[node name="AddResultDialog" type="AcceptDialog" parent="."]
-title = "Asset Manager"
+filters = PackedStringArray("*.png ; PNG images")
 
 [node name="ProjectSettingsDialog" parent="." unique_id=1566484091 instance=ExtResource("2_mxsfc")]
 

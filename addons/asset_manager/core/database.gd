@@ -84,7 +84,8 @@ func rebuild(scanned_assets: Array[Dictionary]) -> bool:
 ## Incrementally inserts newly imported assets without rescanning or replacing
 ## existing entries. Existing tags, subtype, and date_added stay untouched.
 func add_entries(scanned_assets: Array[Dictionary]) -> bool:
-	var changed := false
+	if scanned_assets.is_empty():
+		return true
 	var now := int(Time.get_unix_time_from_system())
 	for entry in scanned_assets:
 		var path: String = entry["path"]
@@ -95,10 +96,7 @@ func add_entries(scanned_assets: Array[Dictionary]) -> bool:
 			"tags": entry.get("tags", []),
 			"date_added": now,
 		}
-		changed = true
 
-	if not changed:
-		return true
 	version += 1
 	return _write_to_disk()
 

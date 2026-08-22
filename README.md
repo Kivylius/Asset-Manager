@@ -25,7 +25,7 @@ Manage all your Godot assets in a single place, get previews and send files dire
 ## Key Features
 
 - Shared asset library outside any project
-- Add individual files directly to the shared library
+- Add PNG images directly to the shared library
 - Live preview for models, materials, shaders, effects/vfx, audio, video and images
 - Search & filtering across your whole assets directory
 - Multi-workspace support & shared assets for collaboration

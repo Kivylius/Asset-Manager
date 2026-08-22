@@ -20,13 +20,7 @@ static func export_asset(source_path: String, dest_path: String) -> Dictionary:
 	var texture_paths := TresMaterialLoader.parse_texture_paths(source_path)
 	for property_name in texture_paths:
 		var tex_source_path: String = texture_paths[property_name]
-		var tex_dest_path := _mirror_relative_path(source_path, tex_source_path, dest_path)
+		var tex_dest_path := dest_path.get_base_dir().path_join(tex_source_path.get_file())
 		AssetExporter.copy_one_file(tex_source_path, tex_dest_path, result)
 
 	return result
-
-static func _mirror_relative_path(main_source: String, dependency_source: String, main_dest: String) -> String:
-	var relative := dependency_source.trim_prefix(main_source.get_base_dir())
-	if relative.begins_with("/"):
-		relative = relative.substr(1)
-	return main_dest.get_base_dir().path_join(relative)

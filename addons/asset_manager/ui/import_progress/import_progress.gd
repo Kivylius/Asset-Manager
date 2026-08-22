@@ -43,8 +43,7 @@ func _ready() -> void:
 	_ticker.timeout.connect(_update_elapsed)
 	add_child(_ticker)
 
-func start(dialog_title: String = "Rebuilding Index") -> void:
-	title = dialog_title
+func start() -> void:
 	_started_ms = Time.get_ticks_msec()
 	_current_stage = ""
 	_current_type = ""
@@ -72,7 +71,7 @@ func on_progress(info: Dictionary) -> void:
 	if stage_id != _current_stage or type_id != _current_type:
 		_current_stage = stage_id
 		_current_type = type_id
-		var heading: String = info.get("stage_label", _stage_label_for(stage_id))
+		var heading := _stage_label_for(stage_id)
 		if not type_id.is_empty():
 			heading += ": " + type_id
 		_stage_label.text = heading
