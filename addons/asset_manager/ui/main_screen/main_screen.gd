@@ -30,7 +30,6 @@ const PROGRESS_DIALOG_SCENE := preload("res://addons/asset_manager/ui/import_pro
 @onready var _preview: PreviewPanel = $MarginContainer/RootVBox/MainSplit/ContentSplit/PreviewPanel
 @onready var folder_dialog: FileDialog = $FolderDialog
 @onready var add_files_dialog: FileDialog = $AddFilesDialog
-@onready var add_folder_dialog: FileDialog = $AddFolderDialog
 @onready var add_result_dialog: AcceptDialog = $AddResultDialog
 @onready var project_settings_dialog: ProjectSettingsDialog = $ProjectSettingsDialog
 @onready var tag_context_menu: PopupMenu = $TagContextMenu
@@ -63,11 +62,9 @@ func _ready() -> void:
 	toolbar.search_changed.connect(func(_text: String) -> void: _on_filter_changed())
 	toolbar.rebuild_pressed.connect(_on_rebuild_pressed)
 	toolbar.add_files_pressed.connect(_on_add_files_pressed)
-	toolbar.add_folder_pressed.connect(_on_add_folder_pressed)
 	toolbar.settings_pressed.connect(func() -> void: project_settings_dialog.open())
 	toolbar.sidebar_toggled.connect(func(collapsed: bool) -> void: _sidebar.visible = not collapsed)
 	add_files_dialog.files_selected.connect(_on_add_files_selected)
-	add_folder_dialog.dir_selected.connect(_on_add_folder_selected)
 
 	_preview.setup(_settings)
 	_init_workspace_picker()
@@ -172,16 +169,8 @@ func _on_add_files_pressed() -> void:
 		return
 	add_files_dialog.popup_centered_ratio(0.7)
 
-func _on_add_folder_pressed() -> void:
-	if current_workspace_path.is_empty():
-		return
-	add_folder_dialog.popup_centered_ratio(0.7)
-
 func _on_add_files_selected(paths: PackedStringArray) -> void:
 	await _finish_adding(AssetLibraryAdder.add_files(paths, current_workspace_path))
-
-func _on_add_folder_selected(path: String) -> void:
-	await _finish_adding(AssetLibraryAdder.add_folder(path, current_workspace_path))
 
 func _finish_adding(result: Dictionary) -> void:
 	var added_paths: Array = result["added_paths"]

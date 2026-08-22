@@ -101,13 +101,6 @@ ok_button_text = "Add Files"
 file_mode = 1
 access = 2
 
-[node name="AddFolderDialog" type="FileDialog" parent="."]
-title = "Add Folder to Asset Manager"
-size = Vector2i(900, 650)
-ok_button_text = "Add Folder"
-file_mode = 2
-access = 2
-
 [node name="AddResultDialog" type="AcceptDialog" parent="."]
 title = "Asset Manager"
 

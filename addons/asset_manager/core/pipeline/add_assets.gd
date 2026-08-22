@@ -35,39 +35,6 @@ static func add_files(source_paths: PackedStringArray, workspace_path: String) -
 		_copy(source_path, destination_path, result)
 	return result
 
-## Recursively adds every asset in a folder. The selected folder's structure is
-## retained below each type bucket, so same-named files in separate subfolders
-## stay separate. Existing files are never overwritten on a repeat import.
-static func add_folder(source_folder: String, workspace_path: String) -> Dictionary:
-	var result := _new_result()
-	var source_root := source_folder.simplify_path()
-	var workspace_root := workspace_path.simplify_path()
-	if not DirAccess.dir_exists_absolute(source_root):
-		result["errors"].append("Folder does not exist: " + source_root)
-		return result
-
-	var source_files: Array[String] = []
-	_collect_files(source_root, source_files, result["ignored_paths"], result["errors"])
-	var folder_prefix := _folder_prefix(source_root, workspace_root)
-
-	for source_path in source_files:
-		var existing_bucket := _workspace_bucket_for_path(source_path, workspace_root)
-		if not existing_bucket.is_empty():
-			result["already_present_paths"].append(source_path)
-			continue
-
-		var type_id := type_id_for_path(source_path)
-		var relative_path := _relative_path(source_path, source_root)
-		var destination_relative := relative_path if folder_prefix.is_empty() else folder_prefix.path_join(relative_path)
-		var destination_path := workspace_root.path_join(type_id).path_join(destination_relative).simplify_path()
-		if FileAccess.file_exists(destination_path) or DirAccess.dir_exists_absolute(destination_path):
-			result["skipped_existing_paths"].append(destination_path)
-			continue
-		if not _ensure_directory(destination_path.get_base_dir(), result["errors"]):
-			continue
-		_copy(source_path, destination_path, result)
-	return result
-
 ## Ambiguous audio and scene extensions use folder names as a hint. Everything
 ## unknown belongs to Other, whose scanner intentionally accepts the remainder.
 static func type_id_for_path(path: String) -> String:
@@ -85,30 +52,6 @@ static func type_id_for_path(path: String) -> String:
 			return entry["id"]
 	return AssetTypesRegistry.FALLBACK_ID
 
-static func _collect_files(folder: String, files: Array[String], ignored_paths: Array[String], errors: Array[String]) -> void:
-	var dir := DirAccess.open(folder)
-	if dir == null:
-		errors.append("Could not read folder: " + folder)
-		return
-
-	dir.list_dir_begin()
-	var entry_name := dir.get_next()
-	while not entry_name.is_empty():
-		var entry_path := folder.path_join(entry_name)
-		var is_directory := dir.current_is_dir()
-		if entry_name.begins_with("."):
-			if not is_directory:
-				ignored_paths.append(entry_path)
-		elif is_directory:
-			if not dir.is_link(entry_name):
-				_collect_files(entry_path, files, ignored_paths, errors)
-		elif _should_ignore_file(entry_name):
-			ignored_paths.append(entry_path)
-		else:
-			files.append(entry_path.simplify_path())
-		entry_name = dir.get_next()
-	dir.list_dir_end()
-
 static func _should_ignore_file(file_name: String) -> bool:
 	return IGNORED_FILE_NAMES.has(file_name) or IGNORED_EXTENSIONS.has(file_name.get_extension().to_lower())
 
@@ -118,28 +61,6 @@ static func _path_has_hint(path: String, hints: PackedStringArray) -> bool:
 		if padded_path.contains("/" + hint + "/"):
 			return true
 	return false
-
-static func _folder_prefix(source_root: String, workspace_root: String) -> String:
-	if source_root == workspace_root:
-		return ""
-	if _is_within(source_root, workspace_root):
-		return _relative_path(source_root, workspace_root)
-	return source_root.get_file()
-
-static func _workspace_bucket_for_path(path: String, workspace_root: String) -> String:
-	if not _is_within(path, workspace_root):
-		return ""
-	var relative := _relative_path(path, workspace_root)
-	var first_segment := relative.get_slice("/", 0)
-	return first_segment if AssetTypesRegistry.get_folder_names().has(first_segment) else ""
-
-static func _is_within(path: String, root: String) -> bool:
-	return path == root or path.begins_with(root.trim_suffix("/") + "/")
-
-static func _relative_path(path: String, root: String) -> String:
-	if path == root:
-		return ""
-	return path.trim_prefix(root.trim_suffix("/") + "/")
 
 static func _ensure_directory(path: String, errors: Array[String]) -> bool:
 	var mkdir_error := DirAccess.make_dir_recursive_absolute(path)
