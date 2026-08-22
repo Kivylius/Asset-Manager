@@ -29,6 +29,9 @@ const PROGRESS_DIALOG_SCENE := preload("res://addons/asset_manager/ui/import_pro
 @onready var _grid: AssetGrid = $MarginContainer/RootVBox/MainSplit/ContentSplit/CenterPanel
 @onready var _preview: PreviewPanel = $MarginContainer/RootVBox/MainSplit/ContentSplit/PreviewPanel
 @onready var folder_dialog: FileDialog = $FolderDialog
+@onready var add_files_dialog: FileDialog = $AddFilesDialog
+@onready var add_folder_dialog: FileDialog = $AddFolderDialog
+@onready var add_result_dialog: AcceptDialog = $AddResultDialog
 @onready var project_settings_dialog: ProjectSettingsDialog = $ProjectSettingsDialog
 @onready var tag_context_menu: PopupMenu = $TagContextMenu
 
@@ -59,8 +62,12 @@ func _ready() -> void:
 
 	toolbar.search_changed.connect(func(_text: String) -> void: _on_filter_changed())
 	toolbar.rebuild_pressed.connect(_on_rebuild_pressed)
+	toolbar.add_files_pressed.connect(_on_add_files_pressed)
+	toolbar.add_folder_pressed.connect(_on_add_folder_pressed)
 	toolbar.settings_pressed.connect(func() -> void: project_settings_dialog.open())
 	toolbar.sidebar_toggled.connect(func(collapsed: bool) -> void: _sidebar.visible = not collapsed)
+	add_files_dialog.files_selected.connect(_on_add_files_selected)
+	add_folder_dialog.dir_selected.connect(_on_add_folder_selected)
 
 	_preview.setup(_settings)
 	_init_workspace_picker()
@@ -159,6 +166,51 @@ func _on_rebuild_pressed() -> void:
 		_refresh_all_after_index_change()
 	else:
 		push_error("AssetManager: failed to write index.db")
+
+func _on_add_files_pressed() -> void:
+	if current_workspace_path.is_empty():
+		return
+	add_files_dialog.popup_centered_ratio(0.7)
+
+func _on_add_folder_pressed() -> void:
+	if current_workspace_path.is_empty():
+		return
+	add_folder_dialog.popup_centered_ratio(0.7)
+
+func _on_add_files_selected(paths: PackedStringArray) -> void:
+	await _finish_adding(AssetLibraryAdder.add_files(paths, current_workspace_path))
+
+func _on_add_folder_selected(path: String) -> void:
+	await _finish_adding(AssetLibraryAdder.add_folder(path, current_workspace_path))
+
+func _finish_adding(result: Dictionary) -> void:
+	var added_paths: Array = result["added_paths"]
+	var already_present_paths: Array = result["already_present_paths"]
+	var skipped_existing_paths: Array = result["skipped_existing_paths"]
+	var ignored_paths: Array = result["ignored_paths"]
+	var errors: Array = result["errors"]
+
+	if not added_paths.is_empty() or not already_present_paths.is_empty() or not skipped_existing_paths.is_empty():
+		await _on_rebuild_pressed()
+
+	var summary: Array[String] = []
+	if not added_paths.is_empty():
+		summary.append("Added %d asset(s) to the library." % added_paths.size())
+	if not already_present_paths.is_empty():
+		summary.append("%d asset(s) were already in the library." % already_present_paths.size())
+	if not skipped_existing_paths.is_empty():
+		summary.append("Skipped %d existing asset(s) without overwriting them." % skipped_existing_paths.size())
+	if not ignored_paths.is_empty():
+		summary.append("Ignored %d metadata file(s)." % ignored_paths.size())
+	if not errors.is_empty():
+		summary.append("Could not add %d asset(s):\n%s" % [errors.size(), "\n".join(errors)])
+		for error_message in errors:
+			push_error("AssetManager: ", error_message)
+	if summary.is_empty():
+		summary.append("No assets were found.")
+
+	add_result_dialog.dialog_text = "\n\n".join(summary)
+	add_result_dialog.popup_centered()
 
 func _on_add_tag_requested(tag_text: String) -> void:
 	sync_if_stale()
