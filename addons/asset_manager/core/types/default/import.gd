@@ -2,8 +2,6 @@
 class_name DefaultImportRunner
 extends RefCounted
 
-const AssetTypesRegistry = preload("res://addons/asset_manager/core/asset_types.gd")
-
 ## Walks the type bucket recursively and returns one entry per file matched
 ## by extension. Used by any type that doesn't declare its own runner in
 ## AssetTypes.ALL.
@@ -43,14 +41,9 @@ static func _walk_recursive(dir: DirAccess, current_path: String, bucket_root_pa
 
 static func _matches_type(file_name: String, type_entry: Dictionary) -> bool:
 	var extensions: Array = type_entry["extensions"]
-	var ext := file_name.get_extension().to_lower()
-	if type_entry["id"] == AssetTypesRegistry.FALLBACK_ID:
-		for known_type in AssetTypesRegistry.ALL:
-			if known_type["id"] != AssetTypesRegistry.FALLBACK_ID and ext in known_type["extensions"]:
-				return false
-		return true
 	if extensions.is_empty():
 		return true
+	var ext := file_name.get_extension().to_lower()
 	return extensions.has(ext)
 
 const TAG_BLOCKLIST: PackedStringArray = [
@@ -94,4 +87,4 @@ static func _is_noise(tag: String) -> bool:
 		or tag.is_valid_int() \
 		or TAG_BLOCKLIST.has(tag) \
 		or TAG_BLOCKLIST.has(tag.trim_suffix("s")) \
-		or AssetTypesRegistry.ALL.any(func(e: Dictionary) -> bool: return e["id"] == tag)
+		or AssetTypes.ALL.any(func(e: Dictionary) -> bool: return e["id"] == tag)

@@ -64,6 +64,7 @@ func _ready() -> void:
 	toolbar.add_files_pressed.connect(_on_add_files_pressed)
 	toolbar.settings_pressed.connect(func() -> void: project_settings_dialog.open())
 	toolbar.sidebar_toggled.connect(func(collapsed: bool) -> void: _sidebar.visible = not collapsed)
+	add_files_dialog.filters = AssetLibraryAdder.file_dialog_filters()
 	add_files_dialog.files_selected.connect(_on_add_files_selected)
 
 	_preview.setup(_settings)
@@ -170,30 +171,48 @@ func _on_add_files_pressed() -> void:
 	add_files_dialog.popup_centered_ratio(0.7)
 
 func _on_add_files_selected(paths: PackedStringArray) -> void:
-	await _finish_adding(AssetLibraryAdder.add_files(paths, current_workspace_path))
+	if paths.is_empty():
+		return
 
-func _finish_adding(result: Dictionary) -> void:
-	var added_paths: Array = result["added_paths"]
-	var already_present_paths: Array = result["already_present_paths"]
-	var skipped_existing_paths: Array = result["skipped_existing_paths"]
-	var ignored_paths: Array = result["ignored_paths"]
-	var errors: Array = result["errors"]
+	sync_if_stale()
+	toolbar.set_rebuilding(true)
+	_progress_dialog.start("Adding Files")
 
-	if not added_paths.is_empty() or not already_present_paths.is_empty() or not skipped_existing_paths.is_empty():
-		await _on_rebuild_pressed()
+	var adder := AssetLibraryAdder.new()
+	adder.progress.connect(_progress_dialog.on_progress)
+	var outcome: Dictionary = await adder.add_files(paths, current_workspace_path)
+	var copy_result: Dictionary = outcome["copy"]
 
+	# When the managed workspace is inside this project, let Godot import only
+	# the files just copied before thumbnail generation tries to load them.
+	await _notify_filesystem_of_new_files(copy_result["copied_paths"])
+
+	var importer := AssetImporter.new()
+	importer.progress.connect(_progress_dialog.on_progress)
+	var indexed := await importer.run_incremental(
+		outcome["entries"], current_workspace_path, _database, self)
+	if not indexed:
+		copy_result["errors"].append("Could not update the asset index.")
+	else:
+		_refresh_all_after_index_change()
+
+	_progress_dialog.finish()
+	toolbar.set_rebuilding(false)
+	_finish_adding(outcome)
+
+func _finish_adding(outcome: Dictionary) -> void:
+	var result: Dictionary = outcome["copy"]
 	var summary: Array[String] = []
-	if not added_paths.is_empty():
-		summary.append("Added %d asset(s) to the library." % added_paths.size())
-	if not already_present_paths.is_empty():
-		summary.append("%d asset(s) were already in the library." % already_present_paths.size())
-	if not skipped_existing_paths.is_empty():
-		summary.append("Skipped %d existing asset(s) without overwriting them." % skipped_existing_paths.size())
-	if not ignored_paths.is_empty():
-		summary.append("Ignored %d metadata file(s)." % ignored_paths.size())
-	if not errors.is_empty():
-		summary.append("Could not add %d asset(s):\n%s" % [errors.size(), "\n".join(errors)])
-		for error_message in errors:
+	var asset_count: int = outcome["entries"].size()
+	if asset_count > 0:
+		summary.append("Added %d asset(s) (%d file(s) copied)." % [asset_count, result["copied_count"]])
+	if result["skipped_existing_count"] > 0:
+		summary.append("Skipped %d file(s) already in the library." % result["skipped_existing_count"])
+	if outcome["ignored_count"] > 0:
+		summary.append("Ignored %d unsupported or metadata file(s)." % outcome["ignored_count"])
+	if not result["errors"].is_empty():
+		summary.append("Could not add %d file(s):\n%s" % [result["errors"].size(), "\n".join(result["errors"])])
+		for error_message in result["errors"]:
 			push_error("AssetManager: ", error_message)
 	if summary.is_empty():
 		summary.append("No assets were found.")
@@ -317,7 +336,11 @@ func _on_send_to_project_pressed() -> void:
 ## scan_sources() + awaiting resources_reimported works around a Godot core
 ## reentrancy bug (godotengine/godot#54864). Re-test before changing it.
 func _notify_filesystem_of_new_files(paths: Array) -> void:
-	if paths.is_empty() or not Engine.is_editor_hint():
+	if not Engine.is_editor_hint():
+		return
+	var project_paths := paths.filter(
+		func(path: String) -> bool: return path.begins_with("res://"))
+	if project_paths.is_empty():
 		return
 
 	var efs := EditorInterface.get_resource_filesystem()

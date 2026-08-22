@@ -66,6 +66,27 @@ func run_import(workspace_path: String, database: AssetDatabase, viewport_host: 
 
 	return true
 
+## Adds known scan entries to the existing index and generates thumbnails only
+## for those entries. Used by Add Files so the cost does not scale with the
+## size of the whole workspace.
+func run_incremental(entries: Array[Dictionary], workspace_path: String, database: AssetDatabase, viewport_host: Node = null) -> bool:
+	if entries.is_empty():
+		return true
+
+	progress.emit({"stage": "database", "label": "index.db", "current": 0, "total": 1})
+	if not database.add_entries(entries):
+		return false
+	progress.emit({"stage": "database", "label": "index.db", "current": 1, "total": 1})
+
+	var cache := ThumbnailCache.new()
+	cache.setup(workspace_path)
+	var stage := ThumbnailStage.new()
+	stage.setup(cache, viewport_host)
+	stage.progress.connect(func(info: Dictionary) -> void: progress.emit(info))
+	await stage.run(entries)
+
+	return database.update_subtypes(stage.take_subtypes())
+
 static func _drop_rare_tags(entries: Array[Dictionary]) -> void:
 	var counts: Dictionary = {}
 	for entry in entries:

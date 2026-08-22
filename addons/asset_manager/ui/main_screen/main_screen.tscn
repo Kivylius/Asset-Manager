@@ -100,6 +100,7 @@ size = Vector2i(900, 650)
 ok_button_text = "Add Files"
 file_mode = 1
 access = 2
+filters = PackedStringArray("*.exr, *.fbx, *.gdshader, *.glb, *.gltf, *.hdr, *.jpeg, *.jpg, *.mp3, *.ogg, *.ogv, *.png, *.tres, *.tscn, *.wav, *.webp ; Supported asset files")
 
 [node name="AddResultDialog" type="AcceptDialog" parent="."]
 title = "Asset Manager"

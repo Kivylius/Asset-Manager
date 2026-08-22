@@ -55,6 +55,10 @@ static func run(bucket_root_path: String, _type_entry: Dictionary) -> Array[Dict
 
 static func _collect(folder_path: String, material_name: String, result: Array[Dictionary]) -> void:
 	var files := _list_files_flat(folder_path)
+	var existing_tres := _find_existing_tres(files)
+	if not existing_tres.is_empty():
+		result.append(_entry_for_tres(folder_path, existing_tres))
+		return
 
 	if _has_usable_images(files):
 		result.append_array(_run_one_folder(folder_path, files, material_name))
@@ -211,4 +215,3 @@ static func _write_tres(tres_path: String, folder_path: String, resolved: Dictio
 	file.store_line("[resource]")
 	for line in resource_lines:
 		file.store_line(line)
-
