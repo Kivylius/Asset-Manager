@@ -59,8 +59,9 @@ static func _repoint_binaries(copy_map: Dictionary, pack_root: String, result: D
 		if path_map.is_empty():
 			continue
 
-		if BinaryResource.rewrite(referencing_dest, path_map) != OK:
-			result["errors"].append("Could not repoint binary resource: " + referencing_dest)
+		var dest := str(copy_map[dep_source])
+		if BinaryResource.rewrite(dest, path_map) != OK:
+			result["errors"].append("Could not repoint binary resource: " + dest)
 
 ## Runs before the copy pass so anything a binary references gets exported
 ## too. The .tscn walk can't see them, a shader used only by a .material
@@ -216,35 +217,21 @@ static func _rewrite_text(text: String, dep_source: String, pack_root: String, c
 
 	return out
 
-## Project exports use res:// paths. A managed workspace may live outside the
-## project, where absolute paths would make a shared asset pack machine-local;
-## preserve a portable relative reference there instead.
-static func _resource_path(referencing_dest: String, dependency_dest: String) -> String:
-	var localized := ProjectSettings.localize_path(dependency_dest)
+static func _resource_path(from_file: String, to_file: String) -> String:
+	var localized := ProjectSettings.localize_path(to_file)
 	if localized.begins_with("res://"):
 		return localized
-	return _relative_path(referencing_dest.get_base_dir(), dependency_dest)
 
-static func _relative_path(from_dir: String, target_path: String) -> String:
-	var from_parts := from_dir.simplify_path().replace("\\", "/").split("/", false)
-	var target_parts := target_path.simplify_path().replace("\\", "/").split("/", false)
-	var common := 0
-	while common < from_parts.size() and common < target_parts.size():
-		var from_part: String = from_parts[common]
-		var target_part: String = target_parts[common]
-		if OS.get_name() == "Windows":
-			from_part = from_part.to_lower()
-			target_part = target_part.to_lower()
-		if from_part != target_part:
-			break
-		common += 1
-
-	var relative_parts: Array[String] = []
-	for _i in range(common, from_parts.size()):
-		relative_parts.append("..")
-	for i in range(common, target_parts.size()):
-		relative_parts.append(target_parts[i])
-	return "/".join(relative_parts)
+	var from_parts := from_file.get_base_dir().simplify_path().split("/", false)
+	var to_parts := to_file.simplify_path().split("/", false)
+	while not from_parts.is_empty() and not to_parts.is_empty() and from_parts[0] == to_parts[0]:
+		from_parts.remove_at(0)
+		to_parts.remove_at(0)
+	var relative: Array[String] = []
+	for _i in range(from_parts.size()):
+		relative.append("..")
+	relative.append_array(to_parts)
+	return "/".join(relative)
 
 static func _strip_uid_attribute(tag: String) -> String:
 	var uid_re := RegEx.new()

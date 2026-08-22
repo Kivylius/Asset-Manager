@@ -67,18 +67,9 @@ static func copy_one_file(source_path: String, dest_path: String, result: Dictio
 ## handler builds its dependency copies off that same base dir, so they
 ## inherit the preserved subfolder for free.
 static func export_asset(source_path: String, dest_dir: String, type_id: String, workspace_path: String) -> Dictionary:
-	var dest_path := _compute_dest_path(source_path, dest_dir, type_id, workspace_path)
-	return copy_asset_to_path(source_path, dest_path, type_id)
-
-## Same per-type dispatch as export_asset(), for callers that have already
-## chosen the exact destination path (such as Add Files importing a new asset
-## into the managed workspace).
-static func copy_asset_to_path(source_path: String, dest_path: String, type_id: String) -> Dictionary:
 	var handler: Variant = HANDLERS.get(type_id, DEFAULT_HANDLER)
+	var dest_path := _compute_dest_path(source_path, dest_dir, type_id, workspace_path)
 	return handler.export_asset(source_path, dest_path)
-
-static func has_handler(type_id: String) -> bool:
-	return HANDLERS.has(type_id)
 
 static func _compute_dest_path(source_path: String, dest_dir: String, type_id: String, workspace_path: String) -> String:
 	var bucket_root := workspace_path.path_join(type_id)

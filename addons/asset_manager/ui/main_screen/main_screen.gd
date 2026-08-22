@@ -64,7 +64,6 @@ func _ready() -> void:
 	toolbar.add_files_pressed.connect(_on_add_files_pressed)
 	toolbar.settings_pressed.connect(func() -> void: project_settings_dialog.open())
 	toolbar.sidebar_toggled.connect(func(collapsed: bool) -> void: _sidebar.visible = not collapsed)
-	add_files_dialog.filters = AssetLibraryAdder.file_dialog_filters()
 	add_files_dialog.files_selected.connect(_on_add_files_selected)
 
 	_preview.setup(_settings)
@@ -178,17 +177,11 @@ func _on_add_files_selected(paths: PackedStringArray) -> void:
 	toolbar.set_rebuilding(true)
 	_progress_dialog.start("Adding Files")
 
-	var adder := AssetLibraryAdder.new()
-	adder.progress.connect(_progress_dialog.on_progress)
-	var outcome: Dictionary = await adder.add_files(paths, current_workspace_path)
-	var copy_result: Dictionary = outcome["copy"]
-
-	# When the managed workspace is inside this project, let Godot import only
-	# the files just copied before thumbnail generation tries to load them.
-	await _notify_filesystem_of_new_files(copy_result["copied_paths"])
-
 	var importer := AssetImporter.new()
 	importer.progress.connect(_progress_dialog.on_progress)
+	var outcome: Dictionary = await importer.add_files(paths, current_workspace_path)
+	var copy_result: Dictionary = outcome["copy"]
+
 	var indexed := await importer.run_incremental(
 		outcome["entries"], current_workspace_path, _database, self)
 	if not indexed:
@@ -202,22 +195,12 @@ func _on_add_files_selected(paths: PackedStringArray) -> void:
 
 func _finish_adding(outcome: Dictionary) -> void:
 	var result: Dictionary = outcome["copy"]
-	var summary: Array[String] = []
-	var asset_count: int = outcome["entries"].size()
-	if asset_count > 0:
-		summary.append("Added %d asset(s) (%d file(s) copied)." % [asset_count, result["copied_count"]])
-	if result["skipped_existing_count"] > 0:
-		summary.append("Skipped %d file(s) already in the library." % result["skipped_existing_count"])
-	if outcome["ignored_count"] > 0:
-		summary.append("Ignored %d unsupported or metadata file(s)." % outcome["ignored_count"])
-	if not result["errors"].is_empty():
-		summary.append("Could not add %d file(s):\n%s" % [result["errors"].size(), "\n".join(result["errors"])])
-		for error_message in result["errors"]:
-			push_error("AssetManager: ", error_message)
-	if summary.is_empty():
-		summary.append("No assets were found.")
-
-	add_result_dialog.dialog_text = "\n\n".join(summary)
+	add_result_dialog.dialog_text = "%d asset(s) added, %d existing, %d ignored, %d error(s)." % [
+		outcome["entries"].size(), result["skipped_existing_count"],
+		outcome["ignored_count"], result["errors"].size(),
+	]
+	for error_message in result["errors"]:
+		push_error("AssetManager: ", error_message)
 	add_result_dialog.popup_centered()
 
 func _on_add_tag_requested(tag_text: String) -> void:
@@ -336,11 +319,7 @@ func _on_send_to_project_pressed() -> void:
 ## scan_sources() + awaiting resources_reimported works around a Godot core
 ## reentrancy bug (godotengine/godot#54864). Re-test before changing it.
 func _notify_filesystem_of_new_files(paths: Array) -> void:
-	if not Engine.is_editor_hint():
-		return
-	var project_paths := paths.filter(
-		func(path: String) -> bool: return path.begins_with("res://"))
-	if project_paths.is_empty():
+	if paths.is_empty() or not Engine.is_editor_hint():
 		return
 
 	var efs := EditorInterface.get_resource_filesystem()
