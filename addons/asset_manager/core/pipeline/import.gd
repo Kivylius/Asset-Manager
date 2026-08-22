@@ -10,6 +10,7 @@ var _total_types: int = 0
 var _completed_types: int = 0
 var _scanned: Array[Dictionary] = []
 signal _type_done(entries: Array)
+signal _files_done(outcome: Dictionary)
 
 var per_type_counts: Dictionary = {}
 
@@ -65,6 +66,37 @@ func run_import(workspace_path: String, database: AssetDatabase, viewport_host: 
 	database.update_subtypes(stage.take_subtypes())
 
 	return true
+
+## Copies selected PNG files into the images bucket.
+func add_files(source_paths: PackedStringArray, workspace_path: String) -> Dictionary:
+	progress.emit({"stage": "scan", "current": 0, "total": source_paths.size()})
+	var task_id := WorkerThreadPool.add_task(func() -> void:
+		call_deferred("emit_signal", "_files_done", _copy_files(source_paths, workspace_path))
+	)
+	var outcome: Dictionary = await _files_done
+	WorkerThreadPool.wait_for_task_completion(task_id)
+	progress.emit({"stage": "scan", "current": source_paths.size(), "total": source_paths.size()})
+	return outcome
+
+static func _copy_files(source_paths: PackedStringArray, workspace_path: String) -> Dictionary:
+	var result := AssetExporter.new_result()
+	result["entries"] = [] as Array[Dictionary]
+
+	for source_path in source_paths:
+		if source_path.get_extension().to_lower() != "png":
+			continue
+		if source_path.begins_with(workspace_path.trim_suffix("/") + "/"):
+			result["skipped_existing_count"] += 1
+			continue
+
+		var destination_path := workspace_path.path_join("images").path_join(source_path.get_file())
+		var existed := FileAccess.file_exists(destination_path)
+		AssetExporter.copy_one_file(source_path, destination_path, result)
+
+		if not existed and FileAccess.file_exists(destination_path):
+			result["entries"].append({"path": destination_path, "type": "images", "tags": []})
+
+	return result
 
 static func _drop_rare_tags(entries: Array[Dictionary]) -> void:
 	var counts: Dictionary = {}

@@ -19,6 +19,11 @@ layout_mode = 2
 tooltip_text = "Rebuild Index"
 text = "Rebuild"
 
+[node name="AddFilesButton" type="Button" parent="HBox"]
+layout_mode = 2
+tooltip_text = "Add PNG images"
+text = "Add PNGs"
+
 [node name="SearchInput" type="LineEdit" parent="HBox" unique_id=29919236]
 layout_mode = 2
 size_flags_horizontal = 3

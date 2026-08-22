@@ -6,11 +6,13 @@ extends MarginContainer
 ## decides what each one means.
 signal sidebar_toggled(collapsed: bool)
 signal rebuild_pressed
+signal add_files_pressed
 signal search_changed(text: String)
 signal settings_pressed
 
 @onready var _sidebar_btn: Button = $HBox/SidebarButton
 @onready var _rebuild_btn: Button = $HBox/RebuildButton
+@onready var _add_files_btn: Button = $HBox/AddFilesButton
 @onready var _search_input: LineEdit = $HBox/SearchInput
 @onready var _settings_btn: Button = $HBox/SettingsButton
 
@@ -22,6 +24,7 @@ func _ready() -> void:
 
 	_sidebar_btn.pressed.connect(_on_sidebar_button_pressed)
 	_rebuild_btn.pressed.connect(func() -> void: rebuild_pressed.emit())
+	_add_files_btn.pressed.connect(func() -> void: add_files_pressed.emit())
 	_search_input.text_changed.connect(func(text: String) -> void: search_changed.emit(text))
 	_settings_btn.pressed.connect(func() -> void: settings_pressed.emit())
 
@@ -41,6 +44,7 @@ func _apply_spacing() -> void:
 ## editor and matches the docks either side of it.
 func _apply_icons() -> void:
 	_set_icon(_rebuild_btn, "Reload")
+	_set_icon(_add_files_btn, "Add")
 	_set_icon(_settings_btn, "Tools")
 
 	# same treatment Godot gives its own filter fields (filesystem_dock.cpp:663)
@@ -70,6 +74,7 @@ func _update_sidebar_icon(collapsed: bool) -> void:
 ## looking unresponsive.
 func set_rebuilding(rebuilding: bool) -> void:
 	_rebuild_btn.disabled = rebuilding
+	_add_files_btn.disabled = rebuilding
 	_rebuild_btn.tooltip_text = "Rebuilding…" if rebuilding else "Rebuild Index"
 
 func search_text() -> String:

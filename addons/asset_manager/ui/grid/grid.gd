@@ -142,7 +142,7 @@ func _update_empty_state(matched_count: int) -> void:
 
 	if database.assets.is_empty():
 		_empty_title.text = "This workspace is empty"
-		_empty_body.text = "Assets live in folders on disk. Drop files into\n%s\nthen press Refresh." % database.workspace_path
+		_empty_body.text = "Use Add PNGs above, or copy assets into\n%s\nthen press Rebuild Index." % database.workspace_path
 		_open_folder_button.visible = true
 	else:
 		_empty_title.text = "Nothing to show"
