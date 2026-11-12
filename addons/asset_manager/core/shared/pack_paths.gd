@@ -26,8 +26,8 @@ static func find_pack_root(start_dir: String, bucket: String) -> String:
 		dir = parent
 	return found if not found.is_empty() else start_dir
 
-static func resolve_pack_path(raw_path: String, base_dir: String, pack_root: String) -> String:
-	if not raw_path.begins_with("res://"):
+static func resolve_pack_path(raw_path: String, base_dir: String, pack_root: String, search_full_path: bool = false) -> String:
+	if not raw_path.begins_with("res://") and not search_full_path:
 		return base_dir.path_join(raw_path)
 
 	# The baked path starts with however many folders the author's project had
@@ -55,24 +55,24 @@ static func resolve_pack_path(raw_path: String, base_dir: String, pack_root: Str
 
 	return ""
 
-## Built once per pack and kept for the rest of the session. Unguarded on
-## purpose: every type that resolves against a pack root loads on the main
-## thread (effects and scenes because the loader registers textures and shaders
-## with the rendering server, themes because Control.set_theme is guarded).
-## A type that ever loads off-thread needs this locked, like _resource_cache.
+## Locked because model thumbnails read this from worker threads.
 static var _files_by_pack: Dictionary = {}
+static var _files_mutex: Mutex = Mutex.new()
 
 static func clear_pack_files() -> void:
+	_files_mutex.lock()
 	_files_by_pack.clear()
+	_files_mutex.unlock()
 
 static func _pack_files(pack_root: String) -> PackedStringArray:
-	if _files_by_pack.has(pack_root):
-		return _files_by_pack[pack_root]
-
-	var files := PackedStringArray()
-	_collect_files(pack_root, files)
-	_files_by_pack[pack_root] = files
-	return files
+	_files_mutex.lock()
+	if not _files_by_pack.has(pack_root):
+		var files := PackedStringArray()
+		_collect_files(pack_root, files)
+		_files_by_pack[pack_root] = files
+	var result: PackedStringArray = _files_by_pack[pack_root]
+	_files_mutex.unlock()
+	return result
 
 static func _collect_files(dir_path: String, into: PackedStringArray) -> void:
 	var dir := DirAccess.open(dir_path)

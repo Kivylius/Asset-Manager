@@ -77,7 +77,8 @@ func show_asset(path: String, _type_entry: Dictionary = {}) -> void:
 
 	if ext == "fbx":
 		var fbx := FBXDocument.new()
-		err = fbx.append_from_file(path, state)
+		var pack_root := PackPaths.find_pack_root(path.get_base_dir(), "models")
+		err = fbx.append_from_file(path, state, 0, ModelsExportHandler.fbx_texture_dir(path, pack_root))
 		if err == OK:
 			_loaded_node = fbx.generate_scene(state)
 	else:

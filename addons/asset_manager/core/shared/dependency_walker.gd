@@ -5,7 +5,7 @@ extends RefCounted
 ## Finds every file an asset needs, mirrors them into a destination root, and
 ## repoints the references afterwards. Works in either direction.
 
-const REFERENCING_EXTENSIONS: PackedStringArray = ["tscn", "tres", "material", "mesh", "res", "gd", "gltf"]
+const REFERENCING_EXTENSIONS: PackedStringArray = ["tscn", "tres", "material", "mesh", "res", "gd", "gltf", "fbx"]
 const REWRITABLE_EXTENSIONS: PackedStringArray = ["tscn", "tres", "gd"]
 
 ## A res:// literal in a script is only followed when it names something we'd
@@ -118,6 +118,10 @@ static func collect_dependencies(file_path: String, pack_root: String, pack_dest
 		_collect_gltf_dependencies(file_path, pack_root, pack_dest_root, copy_map)
 		return
 
+	if file_path.get_extension().to_lower() == "fbx":
+		_collect_fbx_dependencies(file_path, pack_root, pack_dest_root, copy_map)
+		return
+
 	for raw_path in _read_ext_resource_paths(file_path):
 		var dep_source := PackPaths.resolve_pack_path(raw_path, file_path.get_base_dir(), pack_root)
 		if dep_source.is_empty() or not FileAccess.file_exists(dep_source):
@@ -139,6 +143,14 @@ static func _collect_gltf_dependencies(file_path: String, pack_root: String, pac
 		if copy_map.has(dep_source):
 			continue
 		copy_map[dep_source] = _mirrored_dest(dep_source, pack_root, pack_dest_root)
+
+static func _collect_fbx_dependencies(file_path: String, pack_root: String, pack_dest_root: String, copy_map: Dictionary) -> void:
+	var fbx_dest := str(copy_map.get(file_path, _mirrored_dest(file_path, pack_root, pack_dest_root)))
+	var textures_dir := fbx_dest.get_base_dir().path_join("textures")
+	for dep_source in ModelsExportHandler.discover_fbx_dependencies(file_path, pack_root):
+		if copy_map.has(dep_source):
+			continue
+		copy_map[dep_source] = textures_dir.path_join(dep_source.get_file())
 
 ## Binary resources can reference other files too, but their paths are in
 ## compressed bytes, so nothing nested under one is discoverable here. They're

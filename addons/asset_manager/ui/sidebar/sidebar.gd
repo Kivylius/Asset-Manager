@@ -197,6 +197,7 @@ func _build_assets(root: TreeItem, stats: Dictionary) -> void:
 			var sub_prefix := type_prefix.path_join(name)
 			var sub := _tree.create_item(item)
 			sub.set_text(COL_NAME, name)
+			sub.set_expand_right(COL_NAME, true)
 			sub.set_metadata(COL_NAME, {"type": "folder", "path": sub_prefix, "type_id": type_id})
 
 			var children: Array = folders[type_id]["subfolders"][name].keys()
@@ -206,6 +207,7 @@ func _build_assets(root: TreeItem, stats: Dictionary) -> void:
 			for child_name: String in children:
 				var child := _tree.create_item(sub)
 				child.set_text(COL_NAME, child_name)
+				child.set_expand_right(COL_NAME, true)
 				child.set_metadata(COL_NAME, {"type": "folder", "path": sub_prefix.path_join(child_name), "type_id": type_id})
 
 			sub.collapsed = not active_folder_prefix.begins_with(sub_prefix)

@@ -44,7 +44,8 @@ static func _load(path: String) -> Node3D:
 
 	if path.get_extension().to_lower() == "fbx":
 		var fbx := FBXDocument.new()
-		err = fbx.append_from_file(path, state)
+		var pack_root := PackPaths.find_pack_root(path.get_base_dir(), "models")
+		err = fbx.append_from_file(path, state, 0, ModelsExportHandler.fbx_texture_dir(path, pack_root))
 		if err == OK:
 			node = fbx.generate_scene(state)
 	else:
