@@ -31,6 +31,7 @@ func _ready() -> void:
 
 	var scale := EditorInterface.get_editor_scale() if Engine.is_editor_hint() else 1.0
 	custom_minimum_size = Vector2(BASE_WIDTH * scale, 0)
+	_hero.custom_minimum_size = Vector2(0, BASE_WIDTH * 9.0 / 16.0 * scale)
 
 	_autoplay = Timer.new()
 	_autoplay.wait_time = AUTOPLAY_SECONDS

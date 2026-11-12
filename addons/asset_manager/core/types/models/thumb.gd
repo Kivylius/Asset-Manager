@@ -36,7 +36,7 @@ static func render_prepared(prepared: Variant, viewport: ThumbnailViewport, path
 	return await viewport.capture(subject)
 
 static func _load(path: String) -> Node3D:
-	var state := GLTFState.new()
+	var state: GLTFState = FBXState.new() if path.get_extension().to_lower() == "fbx" else GLTFState.new()
 	state.handle_binary_image_mode = GLTFState.HANDLE_BINARY_IMAGE_MODE_EMBED_AS_UNCOMPRESSED
 
 	var err: int = FAILED

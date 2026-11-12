@@ -70,7 +70,7 @@ func show_asset(path: String, _type_entry: Dictionary = {}) -> void:
 	_orbit.snap_to_look_at()
 
 	var ext := path.get_extension().to_lower()
-	var state := GLTFState.new()
+	var state: GLTFState = FBXState.new() if ext == "fbx" else GLTFState.new()
 	var err: int = FAILED
 
 	state.handle_binary_image_mode = GLTFState.HANDLE_BINARY_IMAGE_MODE_EMBED_AS_UNCOMPRESSED

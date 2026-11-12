@@ -84,6 +84,7 @@ size_flags_horizontal = 3
 
 [node name="NameError" type="Label" parent="VBox"]
 visible = false
+custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 autowrap_mode = 3
 
@@ -94,6 +95,7 @@ text_overrun_behavior = 3
 
 [node name="WarningLabel" type="Label" parent="VBox"]
 visible = false
+custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
 autowrap_mode = 3
 

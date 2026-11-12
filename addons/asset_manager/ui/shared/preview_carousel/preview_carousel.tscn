@@ -8,7 +8,7 @@ script = ExtResource("1_80o8i")
 
 [node name="Hero" type="TextureRect" parent="."]
 layout_mode = 2
-expand_mode = 5
+expand_mode = 1
 stretch_mode = 5
 
 [node name="HeroNext" type="TextureRect" parent="Hero"]

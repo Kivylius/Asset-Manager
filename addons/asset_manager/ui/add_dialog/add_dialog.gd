@@ -79,6 +79,7 @@ func ask(type_id: String, source_path: String, workspace_path: String) -> void:
 	else:
 		_show_single_file()
 
+	reset_size()
 	popup_centered()
 
 ## A loose file has nothing to inspect: one file, no formats. An image is its
